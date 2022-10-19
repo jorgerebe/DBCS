@@ -11,7 +11,7 @@ import com.uva.dbcs.grupo7.APIPractica.Repository.UserRepository;
 
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
-
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.http.MediaType;
@@ -108,5 +108,48 @@ public class UsersRest {
             return "Error en los datos";
         }
         return "Cambios realizados.";
+    }
+
+    // TODO: falta documentacion
+    @DeleteMapping("/{id}")
+    public String deleteById(@PathVariable Integer id) {
+        try {
+            repository.deleteById(id);
+            return "Usuario borrado correctamente.";
+        } catch (EmptyResultDataAccessException e) {
+            System.out.println(e);
+            return "El usuario con id " + id + " no existe.";
+        }
+    }
+
+    // TODO: falta documentacion
+    @GetMapping(params = "enabled")
+    public List<User> getUsersByEnabled(@RequestParam Boolean enabled) {
+        List<User> userslist = repository.findByEnabled(enabled);
+        return userslist;
+    }
+
+    // TODO: falta documentacion y control de errores
+    @PutMapping(value = "/enable", params = "user_ids")
+    public String setUsersEnabled(@RequestParam List<Integer> user_ids) {
+        for (Integer i : user_ids) {
+            User user = repository.findById(i)
+                    .orElseThrow(() -> new UserException("No se ha encontrado el usuario con id: " + i + "."));
+            user.setEnabled(true);
+            repository.save(user);
+        }
+        return "Usuarios modificados.";
+    }
+
+    // TODO: falta documentacion y control de errores
+    @PutMapping(value = "/disable", params = "user_ids")
+    public String setUsersDisabled(@RequestParam List<Integer> user_ids) {
+        for (Integer i : user_ids) {
+            User user = repository.findById(i)
+                    .orElseThrow(() -> new UserException("No se ha encontrado el usuario con id: " + i + "."));
+            user.setEnabled(false);
+            repository.save(user);
+        }
+        return "Usuarios modificados.";
     }
 }
