@@ -97,10 +97,10 @@ public class UsersRest {
                 user.setFirstName(jsonObject.getString("firstName"));
             }
             if (jsonObject.has("lastName")) {
-                user.setFirstName(jsonObject.getString("lastName"));
+                user.setLastName(jsonObject.getString("lastName"));
             }
             if (jsonObject.has("password")) {
-                user.setFirstName(jsonObject.getString("password"));
+                user.setPassword(jsonObject.getString("password"));
             }
             repository.save(user);
         } catch (JSONException e) {
