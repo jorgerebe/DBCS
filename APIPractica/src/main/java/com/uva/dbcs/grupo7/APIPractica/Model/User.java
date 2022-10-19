@@ -1,12 +1,24 @@
 package com.uva.dbcs.grupo7.APIPractica.Model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.*;
+
 @Entity
 @Table(name = "User")
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
     @Id
@@ -25,8 +37,14 @@ public class User {
     private String password;
     private Boolean enabled;
     private String role;
-    private Date createdAt;
-    private Date updatedAt;
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+    private LocalDateTime createdAt;
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+    private LocalDateTime updatedAt;
 
     User() {
 
@@ -41,7 +59,7 @@ public class User {
         this.password = password;
         this.enabled = enabled;
         this.role = role;
-        this.createdAt = new Date(System.currentTimeMillis());
+        this.createdAt = LocalDateTime.now();
         // updated
 
     }
@@ -110,19 +128,19 @@ public class User {
         this.role = role;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return this.createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return this.updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
