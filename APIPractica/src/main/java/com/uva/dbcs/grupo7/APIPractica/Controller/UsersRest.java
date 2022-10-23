@@ -110,7 +110,14 @@ public class UsersRest {
         return "Cambios realizados.";
     }
 
-    // TODO: falta documentacion
+    /**
+     * Modifica los datos del usuario a partir del Identificador proporcionado.
+     * 
+     * @param id    Id del usuario a eliminar
+     * @return Mensaje de exito/error.
+     * @throws 
+     */
+
     @DeleteMapping("/{id}")
     public String deleteById(@PathVariable Integer id) {
         try {
@@ -122,34 +129,58 @@ public class UsersRest {
         }
     }
 
-    // TODO: falta documentacion
+    /*
+     * Consulta los usuarios que están habilitados o deshabilitados, según {@code param}
+     *  
+     * @param enabled si es {@code true} se devolverán los usuarios habilitados, los inhabilitados si es {@code false}
+     * @return los usuarios habilitados o inhabilitados
+     */
+
     @GetMapping(params = "enabled")
     public List<User> getUsersByEnabled(@RequestParam Boolean enabled) {
         List<User> userslist = repository.findByEnabled(enabled);
         return userslist;
     }
 
-    // TODO: falta documentacion y control de errores
-    @PutMapping(value = "/enable", params = "user_ids")
-    public String setUsersEnabled(@RequestParam List<Integer> user_ids) {
-        for (Integer i : user_ids) {
-            User user = repository.findById(i)
-                    .orElseThrow(() -> new UserException("No se ha encontrado el usuario con id: " + i + "."));
+    /**
+     * Activa a los usuarios existentes cuyo id se encuentra en la lista de ids {@code user_id}
+     * 
+     * @param user_id Lista de usuarios a habilitar
+     * @return Mensaje de exito/error.
+     */
+
+    @PutMapping(value = "/enable", params = "user_id")
+    public String setUsersEnabled(@RequestParam(required = true) List<Integer> user_id) {
+
+        List<User> users = repository.findByIdIn(user_id);
+
+        for(User user : users){
             user.setEnabled(true);
-            repository.save(user);
         }
+
+        repository.saveAll(users);
+
         return "Usuarios modificados.";
     }
 
-    // TODO: falta documentacion y control de errores
-    @PutMapping(value = "/disable", params = "user_ids")
-    public String setUsersDisabled(@RequestParam List<Integer> user_ids) {
-        for (Integer i : user_ids) {
-            User user = repository.findById(i)
-                    .orElseThrow(() -> new UserException("No se ha encontrado el usuario con id: " + i + "."));
+    /**
+     * Desactiva a los usuarios existentes cuyo id se encuentra en la lista de ids {@code user_id}
+     * 
+     * @param user_id Lista de usuarios a inhabilitar
+     * @return Mensaje de exito/error.
+     */
+
+    @PutMapping(value = "/disable", params = "user_id")
+    public String setUsersDisabled(@RequestParam List<Integer> user_id) {
+
+        List<User> users = repository.findByIdIn(user_id);
+
+        for(User user : users){
             user.setEnabled(false);
-            repository.save(user);
         }
+
+        repository.saveAll(users);
+
         return "Usuarios modificados.";
     }
 }

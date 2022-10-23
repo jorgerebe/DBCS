@@ -1,18 +1,13 @@
 package com.uva.dbcs.grupo7.APIPractica.Model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.*;
 
@@ -23,24 +18,35 @@ public class User {
 
     @Id
     @GeneratedValue
-    Integer id;
+    private Integer id;
+
     @Size(max = 25)
     private String name;
+
     @Size(max = 25)
     private String firstName;
+
     @Size(max = 25)
     private String lastName;
+
     @Basic(optional = false)
     @Column(unique = true)
     private String email;
+
     @Basic(optional = false)
     private String password;
-    private Boolean enabled;
-    private String role;
+
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private Boolean enabled = true;
+
+    @Column(nullable = false)
+    private Role role;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime createdAt;
+
     @LastModifiedDate
     @Column(name = "updated_at")
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
@@ -50,18 +56,13 @@ public class User {
 
     }
 
-    User(String name, String firstName, String lastName, String email, String password, Boolean enabled, String role,
-            Date createdAt, Date updatedAt) {
+    User(String name, String firstName, String lastName, String email, String password, Role role) {
         this.name = name;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.enabled = enabled;
         this.role = role;
-        this.createdAt = LocalDateTime.now();
-        // updated
-
     }
 
     public Integer getId() {
@@ -120,11 +121,11 @@ public class User {
         this.enabled = enabled;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return this.role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
