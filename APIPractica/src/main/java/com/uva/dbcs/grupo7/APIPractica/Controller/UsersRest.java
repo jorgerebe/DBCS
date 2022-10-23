@@ -9,8 +9,7 @@ import com.uva.dbcs.grupo7.APIPractica.Model.User;
 import com.uva.dbcs.grupo7.APIPractica.Exception.UserException;
 import com.uva.dbcs.grupo7.APIPractica.Repository.UserRepository;
 
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
+
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -37,6 +36,7 @@ public class UsersRest {
      *                 Json.
      * @return Mensaje de confirmacion o error.
      */
+
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public String newVino(@RequestBody User newUser, HttpServletResponse response) {
         response.setHeader("Content-type", "application/json");
@@ -79,34 +79,18 @@ public class UsersRest {
      * @param newUserData Json con los datos a modificar.
      * @return Mensaje de exito/error.
      */
+
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable Integer id, @RequestBody String newUserData) {
-        User user = repository.findById(id)
-                .orElseThrow(() -> new UserException("No se ha encontrado el usuario con id: " + id + "."));
-        try {
-            JSONObject jsonObject = new JSONObject(newUserData);
-            if (jsonObject.has("email")) {
-                String mail = jsonObject.getString("email");
-                if (!repository.existsUserByEmail(mail)) {
-                    user.setEmail(mail);
-                } else if (repository.existsUserByEmail(mail)) {
-                    throw new UserException("Ya existe un usuario asociado al email.");
-                }
-            }
-            if (jsonObject.has("firstName")) {
-                user.setFirstName(jsonObject.getString("firstName"));
-            }
-            if (jsonObject.has("lastName")) {
-                user.setLastName(jsonObject.getString("lastName"));
-            }
-            if (jsonObject.has("password")) {
-                user.setPassword(jsonObject.getString("password"));
-            }
-            repository.save(user);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return "Error en los datos";
-        }
+    public String updateUser(@PathVariable Integer id, @RequestBody User user) {
+        User existente = repository.findById(id).orElseThrow(() -> new UserException("No se ha encontrado el usuario con id: " + id + "."));
+
+        existente.setFirstName(user.getFirstName());
+        existente.setLastName(user.getLastName());
+        existente.setEmail(user.getEmail());
+        existente.setPassword(user.getPassword());
+
+        repository.save(existente);
+
         return "Cambios realizados.";
     }
 
@@ -129,7 +113,7 @@ public class UsersRest {
         }
     }
 
-    /*
+    /**
      * Consulta los usuarios que están habilitados o deshabilitados, según {@code param}
      *  
      * @param enabled si es {@code true} se devolverán los usuarios habilitados, los inhabilitados si es {@code false}
