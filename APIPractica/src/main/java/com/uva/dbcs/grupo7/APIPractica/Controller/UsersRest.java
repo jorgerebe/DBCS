@@ -89,7 +89,12 @@ public class UsersRest {
         existente.setEmail(user.getEmail());
         existente.setPassword(user.getPassword());
 
-        repository.save(existente);
+        try{
+            repository.save(existente);   
+        }
+        catch(Exception e){
+            throw new UserException("Error al actualizar los datos del usuario especificado");
+        }
 
         return "Cambios realizados.";
     }
@@ -142,7 +147,12 @@ public class UsersRest {
             user.setEnabled(true);
         }
 
-        repository.saveAll(users);
+        try{
+            repository.saveAll(users);
+        }
+        catch(Exception e){
+            throw new UserException("Error al habilitar los usuarios especificados");
+        }
 
         return "Usuarios modificados.";
     }
@@ -163,7 +173,12 @@ public class UsersRest {
             user.setEnabled(false);
         }
 
-        repository.saveAll(users);
+        try{
+            repository.saveAll(users);
+        }
+        catch(Exception e){
+            throw new UserException("Error al inhabilitar los usuarios especificados");
+        }
 
         return "Usuarios modificados.";
     }
