@@ -1,0 +1,42 @@
+<p *ngIf="mostrarMensaje">{{mensaje}}</p>
+<div class="container">
+   <div class="row">
+      <div class="col-sm-12">
+         <form class="form-inline">
+            <fieldset class="form-group col-sm-12"></fieldset>
+            <fieldset class="form-group col-sm-1">
+               <a class="btn btn-primary" [routerLink]="['/users/nuevo']">+</a>
+            </fieldset>
+         </form>
+         <table class="table table-striped">
+            <thead>
+               <tr class="row">
+                  <th>#</th>
+                  <th>Nombre</th>
+                  <th>Primer apellido</th>
+                  <th>Segundo apellido</th>
+                  <th>Correo electrónico</th>
+                  <th>Rol</th>
+                  <th>Acciones</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="let user of Users" class="row">
+                  <td><i>{{user.id}}</i></td>
+                  <td><i>{{user.name}}</i></td>
+                  <td><i>{{user.firstName}}</i></td>
+                  <td><i>{{user.lastName}}</i></td>
+                  <td><i>{{user.email}}</i></td>
+                  <td><i>{{user.role}}</i></td>
+                  <td class="actions"><a class="btn btn-info" [routerLink]= "['/users', user.id,
+                     'editar']">
+                     <i class="fas fa-pencil"></i></a>
+                     <a class="btn btn-danger" (click)="borrar(user.id, user.name)">
+                     <i class="fas fa-trash"></i></a>
+                  </td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
+</div>
