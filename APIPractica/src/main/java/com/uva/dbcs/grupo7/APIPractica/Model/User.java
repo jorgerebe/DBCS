@@ -44,12 +44,10 @@ public class User {
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime createdAt;
 
     @LastModifiedDate
     @Column(name = "updated_at")
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private LocalDateTime updatedAt;
 
     User() {
