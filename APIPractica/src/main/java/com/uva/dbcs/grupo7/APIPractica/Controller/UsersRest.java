@@ -40,6 +40,15 @@ public class UsersRest {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public String newVino(@RequestBody User newUser, HttpServletResponse response) {
         response.setHeader("Content-type", "application/json");
+
+        if(repository.existsUserByName(newUser.getName())){
+            throw new UserException("Ya existe un usuario con el nombre especificado");
+        }
+
+        if(repository.existsUserByEmail(newUser.getEmail())){
+            throw new UserException("El email especificado ya está en uso");
+        }
+
         try {
             repository.save(newUser);
             return "Nuevo registro creado";

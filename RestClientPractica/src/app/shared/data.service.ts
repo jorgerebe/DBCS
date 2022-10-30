@@ -4,7 +4,7 @@ import {BehaviorSubject} from 'rxjs'
 export class DataService {
 
 
-private mensaje = new BehaviorSubject('Lista de Vinos'); 
+private mensaje = new BehaviorSubject('Lista de Usuarios'); 
 
 mensajeActual = this.mensaje.asObservable();
 private mostrarMensaje = new BehaviorSubject<boolean>(false);

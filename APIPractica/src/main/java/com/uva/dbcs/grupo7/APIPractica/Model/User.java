@@ -9,8 +9,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.fasterxml.jackson.annotation.*;
-
 @Entity
 @Table(name = "User")
 @EntityListeners(AuditingEntityListener.class)
@@ -21,12 +19,16 @@ public class User {
     private Integer id;
 
     @Size(max = 25)
+    @Basic(optional = false)
+    @Column(unique = true)
     private String name;
 
     @Size(max = 25)
+    @Basic(optional = false)
     private String firstName;
 
     @Size(max = 25)
+    @Basic(optional = false)
     private String lastName;
 
     @Basic(optional = false)
