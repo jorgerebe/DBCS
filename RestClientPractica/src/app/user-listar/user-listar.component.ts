@@ -1,6 +1,7 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
+import { Component, OnChanges, OnInit,ViewChild, ɵɵqueryRefresh } from '@angular/core';
 import { ClienteApiRestService } from '../shared/cliente-api-rest.service';
 import { User} from '../shared/app.model';
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { DataService } from '../shared/data.service';
 import { debounceTime, Subject } from 'rxjs';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
@@ -10,32 +11,45 @@ import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './user-listar.component.html',
   styleUrls: ['./user-listar.component.css']
 })
-export class UserListarComponent implements OnInit {
+export class UserListarComponent implements OnInit{
   
+  private route : any = '';
   private _success = new Subject<string>();
   successMessage = '';
   Users!: User[];
   mostrarMensaje!: boolean;
   tipoMensaje!: string;
   mensaje!: string;
+  enabled : boolean | undefined;
 
-  constructor( private clienteApiRest: ClienteApiRestService, private datos: DataService)
-  { }
+  constructor(
+    private ruta: ActivatedRoute,
+    private router: Router,
+    private clienteApiRest: ClienteApiRestService,
+    private datos: DataService)
+  {this.router.routeReuseStrategy.shouldReuseRoute = () => false;}
 
   @ViewChild('selfClosingAlert', { static: false }) selfClosingAlert!: NgbAlert;
 
   ngOnInit() {
+
     this._success.subscribe((message) => (this.successMessage = message));
     this._success.pipe(debounceTime(5000)).subscribe(() => {
 			if (this.selfClosingAlert) {
 				this.selfClosingAlert.close();
 			}
-		});
+		})
+
+    this.ruta.queryParams
+      .subscribe(params => {
+      this.enabled = params['enabled'];
+    })
+
 
     this.getUsers_AccesoResponse();
     }
     getUsers_AccesoResponse() {
-    this.clienteApiRest.getAllUsers_ConResponse().subscribe(
+    this.clienteApiRest.getAllUsers_ConResponse(this.enabled).subscribe(
     resp =>{
     
     if (resp.status < 400 ) {
@@ -79,7 +93,7 @@ export class UserListarComponent implements OnInit {
             next: resp => {
             if (resp.status < 400) {
               console.log("kek");
-              this._success.next("kekw");
+              this._success.next("Estado del usuario actualizado");
             } else {
             this.mostrarMensaje = true;
             this.mensaje = "Error al activar el usuario";

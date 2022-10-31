@@ -61,7 +61,7 @@ export class EditarUserComponent implements OnInit {
     console.log("Enviado formulario");
     if (this.id) {
       this.clienteApiRest
-        .modificarPrecio(String(this.user.id), this.user)
+        .editarUser(String(this.user.id), this.user)
         .subscribe(
           (resp) => {
             if (resp.status < 400) {
@@ -78,23 +78,6 @@ export class EditarUserComponent implements OnInit {
             throw err;
           }
         );
-    } else {
-      this.clienteApiRest.anadirUser(this.user).subscribe(
-        (resp) => {
-          if (resp.status < 400) {
-            this.datos.cambiarMostrarMensaje(true);
-            this.datos.cambiarMensaje(resp.body);
-          } else {
-            this.datos.cambiarMostrarMensaje(true);
-            this.datos.cambiarMensaje("Error al añadir user");
-          }
-          this.router.navigate(["users"]);
-        },
-        (err) => {
-          console.log("Error al editar: " + err.message);
-          throw err;
-        }
-      );
     }
   }
 
