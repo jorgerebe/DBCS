@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { ClienteApiRestService } from '../shared/cliente-api-rest.service';
 import { User} from '../shared/app.model';
 import { DataService } from '../shared/data.service';
+import { debounceTime, Subject } from 'rxjs';
+import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-user-listar',
@@ -9,15 +11,26 @@ import { DataService } from '../shared/data.service';
   styleUrls: ['./user-listar.component.css']
 })
 export class UserListarComponent implements OnInit {
+  
+  private _success = new Subject<string>();
+  successMessage = '';
   Users!: User[];
   mostrarMensaje!: boolean;
+  tipoMensaje!: string;
   mensaje!: string;
-  // Inyectamos los servicios
+
   constructor( private clienteApiRest: ClienteApiRestService, private datos: DataService)
   { }
 
-  ngOnInit() {
+  @ViewChild('selfClosingAlert', { static: false }) selfClosingAlert!: NgbAlert;
 
+  ngOnInit() {
+    this._success.subscribe((message) => (this.successMessage = message));
+    this._success.pipe(debounceTime(5000)).subscribe(() => {
+			if (this.selfClosingAlert) {
+				this.selfClosingAlert.close();
+			}
+		});
 
     this.getUsers_AccesoResponse();
     }
@@ -57,5 +70,52 @@ export class UserListarComponent implements OnInit {
     }
     )}
     }
+
+    public onEnabledUserChanged(event: EventTarget | null, id: Number){
+      if(EventTarget != null){
+        let ischecked = (<HTMLInputElement>event).checked;
+        if(ischecked == true){
+          this.clienteApiRest.setUserEnabled(String(id)).subscribe({
+            next: resp => {
+            if (resp.status < 400) {
+              console.log("kek");
+              this._success.next("kekw");
+            } else {
+            this.mostrarMensaje = true;
+            this.mensaje = "Error al activar el usuario";
+            }
+            },
+            error: err=> {
+            console.log("Error al activar: " + err.message);
+            throw err;
+            }}
+            )
+        }else{
+          this.clienteApiRest.setUserDisabled(String(id)).subscribe({
+            next: resp => {
+            if (resp.status < 400) { 
+            this.mostrarMensaje = true;
+            this.mensaje = "Usuario desactivado con éxito."; 
+            } else {
+            this.mostrarMensaje = true;
+            this.mensaje = "Error al desactivar registro";
+            }
+            },
+            error: err=> {
+            console.log("Error al desactivar: " + err.message);
+            throw err;
+            }}
+            )
+        }
+      }
+      
+      
+    }
+
+    public changeSuccessMessage(message: string) {
+      this._success.next("kekw");
+    }
+
+    
 
 }

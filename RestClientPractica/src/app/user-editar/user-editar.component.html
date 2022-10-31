@@ -2,109 +2,115 @@
    <h3 class="titulo">Edición de usuarios</h3>
    <div class="col-sm-12">
       <form (ngSubmit)="userForm.form.valid && onSubmit()" #userForm="ngForm">
-      <div class="form-group row">
-         <div class="col-sm-1">
-            <label class="control-label" for="name">Id</label>
-            <input type="text" class="form-control" [disabled]="id ? true : false"
-            [required]="id ? false : true"
-            [(ngModel)]="user.id" name="id">
-         </div>
-         <div class="offset-sm-2 col-sm-3">
-            <label class="control-label" for="name">Nombre</label>
-            <input type="text" class="form-control" [disabled]="id ? true : false"
-            [required]="id ? false : true"
-            [(ngModel)]="user.name" name="name">
-         </div>
-      </div>
-      <div class="form-group row">
-         <div class="col-sm-3">
-            <label class="control-label" for="firstName">Primer apellido</label>
-            <input type="text" class="form-control"
-            required
-            [(ngModel)]="user.firstName" name="firstName" #firstName="ngModel"
-            [ngClass]="{ 'is-invalid': firstName.invalid }">
-            <div class="invalid-feedback" *ngIf="firstName.invalid">
-               <p *ngIf="firstName.errors?.['required']">El primer apellido es obligatorio.</p>
+         <div class="form-group row">
+            <div class="col-sm-1">
+               <label class="control-label" for="name">Id</label>
+               <input type="text" class="form-control" [disabled]="id ? true : false"
+               [required]="id ? false : true"
+               [(ngModel)]="user.id" name="id">
+            </div>
+            <div class="offset-sm-2 col-sm-3">
+               <label class="control-label" for="name">Nombre</label>
+               <input type="text" class="form-control" [disabled]="id ? true : false"
+               [required]="id ? false : true"
+               [(ngModel)]="user.name" name="name">
             </div>
          </div>
-         <div class="col-sm-3">
-            <label class="control-label" for="lastName">Segundo apellido</label>
-            <input type="text" class="form-control"
-            required
-            [(ngModel)]="user.lastName" name="lastName" #lastName="ngModel"
-            [ngClass]="{ 'is-invalid': lastName.invalid }">
-            <div class="invalid-feedback" *ngIf="lastName.invalid">
-               <p *ngIf="lastName.errors?.['required']">El segundo apellido es obligatorio.</p>
+         <div class="form-group row">
+            <div class="col-sm-3">
+               <label class="control-label" for="firstName">Primer apellido</label>
+               <input type="text" class="form-control"
+               required
+               [(ngModel)]="user.firstName" name="firstName" #firstName="ngModel"
+               [ngClass]="{ 'is-invalid': firstName.invalid }">
+               <div class="invalid-feedback" *ngIf="firstName.invalid">
+                  <p *ngIf="firstName.errors?.['required']">El primer apellido es obligatorio.</p>
+               </div>
+            </div>
+            <div class="col-sm-3">
+               <label class="control-label" for="lastName">Segundo apellido</label>
+               <input type="text" class="form-control"
+               required
+               [(ngModel)]="user.lastName" name="lastName" #lastName="ngModel"
+               [ngClass]="{ 'is-invalid': lastName.invalid }">
+               <div class="invalid-feedback" *ngIf="lastName.invalid">
+                  <p *ngIf="lastName.errors?.['required']">El segundo apellido es obligatorio.</p>
+               </div>
             </div>
          </div>
-      </div>
-      <div class="form-group row">
-         <div class="col-sm-3">
-            <label class="control-label" name="email" for="email">Correo electrónico</label>
-            <input type="text" class="form-control" 
-            required
-            [(ngModel)]="user.email" name="email" #email="ngModel"
-            [ngClass]="{ 'is-invalid': email.invalid }" email>
-            <div class="invalid-feedback" *ngIf="email.invalid">
-               <p *ngIf="email.errors?.['required']">El correo electrónico es obligatorio.</p>
-               <p *ngIf="email.errors?.['email']">Introducza un correo electrónico correcto.</p>
+         <div class="form-group row">
+            <div class="col-sm-3">
+               <label class="control-label" name="email" for="email">Correo electrónico</label>
+               <input type="text" class="form-control" 
+               required
+               [(ngModel)]="user.email" name="email" #email="ngModel"
+               [ngClass]="{ 'is-invalid': email.invalid }" email>
+               <div class="invalid-feedback" *ngIf="email.invalid">
+                  <p *ngIf="email.errors?.['required']">El correo electrónico es obligatorio.</p>
+                  <p *ngIf="email.errors?.['email']">Introducza un correo electrónico correcto.</p>
+               </div>
             </div>
-         </div>
-      
-         <div class="col-sm-3">
-            <label class="control-label" for="password">Contraseña</label>
-            <input type="text" class="form-control" required
-            [(ngModel)]="user.password" name="password" #password=ngModel 
-            [ngClass]="{ 'is-invalid': password.invalid }"password minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$">
-            <div class="invalid-feedback" *ngIf="password.invalid">
-               <p *ngIf="password.errors?.['required']">El correo electrónico es obligatorio.</p>
-               <p *ngIf="password.errors?.['pattern']">La contraseña debe ser mínimo de 8 caracteres y debe contener mayusculas, minusculas y números.</p>
-            </div>
-         </div>
-      </div>
-
-      <div class="form-group row">
-         <div class="col-sm-3">
-            <label class="control-label" for="role">Rol</label>
-            <input type="text" class="form-control" name="role"
-             #role="ngModel"
-             [ngModel]="user.role" disabled>
-         </div>
          
-      
-         <div class="form-check form-switch offset-sm-1 col-sm-3">
-            <label *ngIf="user.enabled" class="form-check-label" for="enabled">Activado</label>
-            <label *ngIf="!user.enabled" class="form-check-label" for="enabled">Desactivado</label>
-
-            <input type="checkbox" class="form-check-input" required name="enabled"
-            [ngModel]="user.enabled" disabled>
+            <div class="col-sm-3">
+               <label class="control-label" for="password">Contraseña</label>
+               <input type="text" class="form-control" required
+               [(ngModel)]="user.password" name="password" #password=ngModel 
+               [ngClass]="{ 'is-invalid': password.invalid }"password minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$">
+               <div class="invalid-feedback" *ngIf="password.invalid">
+                  <p *ngIf="password.errors?.['required']">El correo electrónico es obligatorio.</p>
+                  <p *ngIf="password.errors?.['pattern']">La contraseña debe ser mínimo de 8 caracteres y debe contener mayusculas, minusculas y números.</p>
+               </div>
+            </div>
          </div>
-      </div>
 
-      <div class="form-group row">
-         <div class="col-sm-3">
-            <label class="control-label" for="createdAt">Fecha de creación</label>
-            <input type="text" class="form-control" name="created"
-             #created="ngModel"
-             [ngModel]="user.updatedAt | date:'dd-MM-yyyy HH:mm'" disabled>
+         <div class="form-group row">
+            <div class="col-sm-3">
+               <label class="control-label" for="role">Rol</label>
+               <input type="text" class="form-control" name="role"
+               #role="ngModel"
+               [ngModel]="user.role" disabled>
+            </div>
+            
+
+            <div class="form-check col-sm-3">
+               <label class="control-label" for="role">Estado</label>
+               <div class="row form-switch align-items-center h-50" >
+                  <div>
+                     <label *ngIf="user.enabled" class="form-check-label" for="enabled">Activado</label>
+                     <label *ngIf="!user.enabled" class="form-check-label" for="enabled">Desactivado</label>
+
+                     <input type="checkbox" class=" form-check-input" required name="enabled"
+                     [ngModel]="user.enabled" disabled>
+                  </div>
+               </div>
+            </div>
          </div>
+
+         <div class="form-group row">
+            <div class="col-sm-3">
+               <label class="control-label" for="createdAt">Fecha de creación</label>
+               <input type="text" class="form-control" name="created"
+               #created="ngModel"
+               [ngModel]="user.updatedAt | date:'dd-MM-yyyy HH:mm'" disabled>
+            </div>
+            
          
-      
-         <div class="col-sm-3">
-            <label class="control-label" for="updatedAt">Fecha de modificación</label>
-            <input type="text" class="form-control" required name="updated"
-            #updated="ngModel"
-            [ngModel]="user.updatedAt | date:'dd-MM-yyyy HH:mm'" disabled>
+            <div class="col-sm-3">
+               <label class="control-label" for="updatedAt">Fecha de modificación</label>
+               <input type="text" class="form-control" required name="updated"
+               #updated="ngModel"
+               [ngModel]="user.updatedAt | date:'dd-MM-yyyy HH:mm'" disabled>
+            </div>
          </div>
-      </div>
 
 
-      <div class="form-group row">
-         <div class="offset-sm-5 col-sm-1 d-grid gap-2">
-            <button type="submit" class="btn btn-primary btn-block" [disabled]="!userForm.form.valid">
-            Submit </button>
+
+         <div class="form-group row">
+            <div class="offset-sm-4 col-sm-1 d-grid gap-2">
+               <button type="submit" class="btn btn-primary btn-block" [disabled]="!userForm.form.valid">
+               Aceptar </button>
+            </div>
          </div>
-      </div>
       </form>
    </div>
 </div>

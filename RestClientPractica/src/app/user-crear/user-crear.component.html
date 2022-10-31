@@ -69,24 +69,38 @@
                </select>
             </div>
           
-       
-          <div class="form-check form-switch offset-sm-1 col-sm-3">
+            <div class="form-check col-sm-3">
+               <label class="control-label" for="role">Estado</label>
+               <div class="row form-switch align-items-center h-50" >
+                  <div>
+                     <label *ngIf="user.enabled" class="form-check-label" for="enabled">Activado</label>
+                     <label *ngIf="!user.enabled" class="form-check-label" for="enabled">Desactivado</label>
+   
+                     <input type="checkbox" class=" form-check-input" required name="enabled"
+                     [ngModel]="user.enabled" disabled>
+                  </div>
+               </div>
+            </div>
+
+
+
+          <!-- <div class="form-check form-switch offset-sm-1 col-sm-3">
              <label *ngIf="user.enabled" class="form-check-label" for="enabled">Activado</label>
              <label *ngIf="!user.enabled" class="form-check-label" for="enabled">Desactivado</label>
  
              <input type="checkbox" [defaultChecked]="true" class="form-check-input" required name="enabled"
              [ngModel]="user.enabled" disabled>
-          </div>
+          </div> -->
        </div> 
 
        <div class="form-group row">
           <div class="offset-sm-4 col-sm-1 d-grid gap-2">
              <button type="submit" class="btn btn-primary btn-block" [disabled]="!userForm.form.valid">
-             Submit </button>
+             Aceptar </button>
           </div>
           <div class="col-sm-1">
             <button type="reset" class="btn btn-primary btn-block">
-            Clear</button>
+            Borrar</button>
          </div>
        </div>
       <div class="form-group row-3">

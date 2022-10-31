@@ -12,6 +12,7 @@ import { DataService } from './shared/data.service';
 import { UserListarComponent } from './user-listar/user-listar.component';
 import { EditarUserComponent } from './user-editar/user-editar.component';
 import { CrearUserComponent } from './user-crear/user-crear.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -26,7 +27,8 @@ import { CrearUserComponent } from './user-crear/user-crear.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    NgbModule
   ],
   providers: [
     ClienteApiRestService,

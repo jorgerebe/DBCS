@@ -33,4 +33,14 @@ getUser(id: String): Observable<HttpResponse<User>> {
 let url = ClienteApiRestService.BASE_URI + id;
 return this.http.get<User>(url, { observe: 'response' });
 }
+setUserDisabled(id: String): Observable<HttpResponse<any>>{
+let url = ClienteApiRestService.BASE_URI + "disable?user_id=" + id;
+console.log(url);
+return this.http.put(url, {},  {observe: 'response', responseType: 'text'});
+}
+setUserEnabled(id: String): Observable<HttpResponse<any>>{
+    let url = ClienteApiRestService.BASE_URI + "enable?user_id=" + id;
+    console.log(url);
+    return this.http.put(url, {},  {observe: 'response', responseType: 'text'});
+    }
 }
