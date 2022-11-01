@@ -57,7 +57,7 @@
                [(ngModel)]="user.password" name="password" #password=ngModel 
                [ngClass]="{ 'is-invalid': password.invalid }"password minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$">
                <div class="invalid-feedback" *ngIf="password.invalid">
-                  <p *ngIf="password.errors?.['required']">El correo electrónico es obligatorio.</p>
+                  <p *ngIf="password.errors?.['required']">La contraseña es obligatoria.</p>
                   <p *ngIf="password.errors?.['pattern']">La contraseña debe ser mínimo de 8 caracteres y debe contener mayusculas, minusculas y números.</p>
                </div>
             </div>

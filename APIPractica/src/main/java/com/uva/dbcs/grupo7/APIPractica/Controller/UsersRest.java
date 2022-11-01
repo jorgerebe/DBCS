@@ -165,7 +165,7 @@ public class UsersRest {
             throw new UserException("Error al habilitar los usuarios especificados");
         }
 
-        return "Usuarios modificados.";
+        return "El estado de los usuarios elegidos ha sido activado";
     }
 
     /**
@@ -191,6 +191,6 @@ public class UsersRest {
             throw new UserException("Error al inhabilitar los usuarios especificados");
         }
 
-        return "Usuarios modificados.";
+        return "El estado de los usuarios elegidos ha sido desactivado";
     }
 }

@@ -51,14 +51,28 @@ export class ClienteApiRestService {
         return this.http.get<User>(url, { observe: 'response' });
     }
 
-    setUserDisabled(id: String): Observable<HttpResponse<any>>{
-        let url = ClienteApiRestService.BASE_URI + "disable?user_id=" + id;
+    setUserDisabled(ids: String[]): Observable<HttpResponse<any>>{
+        let url = ClienteApiRestService.BASE_URI + "disable?user_id=";
+
+        ids.forEach(id => {
+                    url += id + ",";
+        });
+
+        url = url.substring(0, url.length-1);
+
         console.log(url);
         return this.http.put(url, {},  {observe: 'response', responseType: 'text'});
     }
 
-    setUserEnabled(id: String): Observable<HttpResponse<any>>{
-        let url = ClienteApiRestService.BASE_URI + "enable?user_id=" + id;
+    setUserEnabled(ids: String[]): Observable<HttpResponse<any>>{
+        let url = ClienteApiRestService.BASE_URI + "enable?user_id=";
+
+        ids.forEach(id => {
+                    url += id + ",";
+        });
+
+        url = url.substring(0, url.length-1);
+
         console.log(url);
         return this.http.put(url, {},  {observe: 'response', responseType: 'text'});
     }

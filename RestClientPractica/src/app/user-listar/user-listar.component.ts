@@ -86,14 +86,16 @@ export class UserListarComponent implements OnInit{
     }
 
     public onEnabledUserChanged(event: EventTarget | null, id: Number){
+
+      var ids : String[] = [String(id)];
+
       if(EventTarget != null){
         let ischecked = (<HTMLInputElement>event).checked;
         if(ischecked == true){
-          this.clienteApiRest.setUserEnabled(String(id)).subscribe({
+          this.clienteApiRest.setUserEnabled(ids).subscribe({
             next: resp => {
             if (resp.status < 400) {
-              console.log("kek");
-              this._success.next("Estado del usuario actualizado");
+              this._success.next(resp.body);
             } else {
             this.mostrarMensaje = true;
             this.mensaje = "Error al activar el usuario";
@@ -105,11 +107,11 @@ export class UserListarComponent implements OnInit{
             }}
             )
         }else{
-          this.clienteApiRest.setUserDisabled(String(id)).subscribe({
+
+          this.clienteApiRest.setUserDisabled(ids).subscribe({
             next: resp => {
             if (resp.status < 400) { 
-            this.mostrarMensaje = true;
-            this.mensaje = "Usuario desactivado con éxito."; 
+              this._success.next(resp.body);
             } else {
             this.mostrarMensaje = true;
             this.mensaje = "Error al desactivar registro";
@@ -126,10 +128,44 @@ export class UserListarComponent implements OnInit{
       
     }
 
-    public changeSuccessMessage(message: string) {
-      this._success.next("kekw");
+    desactivarTodos(){
+      this.clienteApiRest.setUserDisabled(this.Users.map(i => i.id.toString())).subscribe(
+        resp => {
+        if (resp.status < 400) { 
+        this.mostrarMensaje = true;
+        this.mensaje = resp.body;
+        this._success.next(resp.body);
+        this.getUsers_AccesoResponse();
+        } else {
+        this.mostrarMensaje = true;
+        this.mensaje = "Error al actualizar estado";
+        }
+        },
+        err=> {
+        console.log("Error al actualizar estado: " + err.message);
+        throw err;
+        }
+        )
     }
 
-    
+    activarTodos(){
+      this.clienteApiRest.setUserEnabled(this.Users.map(i => i.id.toString())).subscribe(
+        resp => {
+        if (resp.status < 400) { 
+        this.mostrarMensaje = true;
+        this.mensaje = resp.body; 
+        this._success.next(resp.body);
+        this.getUsers_AccesoResponse();
+        } else {
+        this.mostrarMensaje = true;
+        this.mensaje = "Error al actualizar estado";
+        }
+        },
+        err=> {
+        console.log("Error al actualizar estado: " + err.message);
+        throw err;
+        }
+        )
+    }
 
 }

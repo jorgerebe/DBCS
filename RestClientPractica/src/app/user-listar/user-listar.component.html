@@ -16,6 +16,14 @@
                </div>
             </div>
          </form>
+         <div class="row">
+            <div [ngClass]="{ 'offset-5': mostrarMensaje,'offset-10': !mostrarMensaje }" class=" col-sm-2 mb-2">
+               <a class="btn btn-primary" (click)="desactivarTodos()">Desactivar todos</a>
+            </div>
+            <div [ngClass]="{ 'offset-5': mostrarMensaje,'offset-10': !mostrarMensaje }" class=" col-sm-2 mb-2">
+               <a class="btn btn-primary" (click)="activarTodos()">Activar todos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+            </div>
+         </div>
          <table class="table table-striped text-center">
             <thead>
                <tr>
