@@ -14,6 +14,8 @@ import { EditarUserComponent } from './user-editar/user-editar.component';
 import { CrearUserComponent } from './user-crear/user-crear.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { ToastsContainer } from './toasts/toasts-container.component';
+
 
 
 @NgModule({
@@ -21,7 +23,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AppComponent,
     UserListarComponent,
     EditarUserComponent,
-    CrearUserComponent
+    CrearUserComponent,
+    ToastsContainer
   ],
   imports: [
     BrowserModule,
@@ -33,6 +36,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
   providers: [
     ClienteApiRestService,
     DataService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent, UserListarComponent]
 })
 export class AppModule { }

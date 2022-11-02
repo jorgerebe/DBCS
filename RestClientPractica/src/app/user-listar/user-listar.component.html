@@ -1,28 +1,27 @@
 
+
+
+<div class="buttons">
+	<button class="btn btn-primary" (click)="showStandard()" ngbTooltip="Will disappear in 5s">Standard toast</button
+	>&nbsp;
+	<button class="btn btn-success" (click)="showSuccess()" ngbTooltip="Will disappear in 10s">Success toast</button
+	>&nbsp;
+	<button class="btn btn-danger" (click)="showDanger()" ngbTooltip="Will disappear in 15s">Danger toast</button
+	>&nbsp;
+</div>
+
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
 <h3 class="titulo mt-2 mb-4">Gestión de usuarios
 </h3>
 <div class="container">
    <div class="row">
       <div class="col-sm-12">
-         <form class="form-inline">
-            <div class="row">
-               <div class="col-sm-5 mb-2">
-                  <ngb-alert #selfClosingAlert *ngIf="successMessage" type="success" (closed)="successMessage = ''">
-                     {{ successMessage }}
-                  </ngb-alert>
-                  
-               </div>
-               <div [ngClass]="{ 'offset-5': mostrarMensaje,'offset-10': !mostrarMensaje }" class=" col-sm-2 mb-2">
-               </div>
-            </div>
-         </form>
          <div class="row">
-            <div [ngClass]="{ 'offset-5': mostrarMensaje,'offset-10': !mostrarMensaje }" class=" col-sm-2 mb-2">
-               <a class="btn btn-primary" (click)="desactivarTodos()">Desactivar todos</a>
+            <div class="button-box col mb-3">
+               <a class="btn btn-primary me-3"  (click)="desactivarTodos()">Desactivar todos</a>
+               <a class="btn btn-primary" (click)="activarTodos()">Activar todos</a>
             </div>
-            <div [ngClass]="{ 'offset-5': mostrarMensaje,'offset-10': !mostrarMensaje }" class=" col-sm-2 mb-2">
-               <a class="btn btn-primary" (click)="activarTodos()">Activar todos&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-            </div>
+
          </div>
          <table class="table table-striped text-center">
             <thead>

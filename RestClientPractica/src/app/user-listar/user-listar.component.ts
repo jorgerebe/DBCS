@@ -5,6 +5,7 @@ import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { DataService } from '../shared/data.service';
 import { debounceTime, Subject } from 'rxjs';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
+import { ToastService } from '../toasts/toast-service';
 
 @Component({
   selector: 'app-user-listar',
@@ -14,7 +15,6 @@ import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 export class UserListarComponent implements OnInit{
   
   private route : any = '';
-  private _success = new Subject<string>();
   successMessage = '';
   Users!: User[];
   mostrarMensaje!: boolean;
@@ -26,20 +26,13 @@ export class UserListarComponent implements OnInit{
     private ruta: ActivatedRoute,
     private router: Router,
     private clienteApiRest: ClienteApiRestService,
-    private datos: DataService)
+    private datos: DataService,
+    public toastService: ToastService)
   {this.router.routeReuseStrategy.shouldReuseRoute = () => false;}
 
   @ViewChild('selfClosingAlert', { static: false }) selfClosingAlert!: NgbAlert;
 
   ngOnInit() {
-
-    this._success.subscribe((message) => (this.successMessage = message));
-    this._success.pipe(debounceTime(5000)).subscribe(() => {
-			if (this.selfClosingAlert) {
-				this.selfClosingAlert.close();
-			}
-		})
-
     this.ruta.queryParams
       .subscribe(params => {
       this.enabled = params['enabled'];
@@ -95,7 +88,7 @@ export class UserListarComponent implements OnInit{
           this.clienteApiRest.setUserEnabled(ids).subscribe({
             next: resp => {
             if (resp.status < 400) {
-              this._success.next(resp.body);
+              //this._success.next(resp.body);
             } else {
             this.mostrarMensaje = true;
             this.mensaje = "Error al activar el usuario";
@@ -111,7 +104,7 @@ export class UserListarComponent implements OnInit{
           this.clienteApiRest.setUserDisabled(ids).subscribe({
             next: resp => {
             if (resp.status < 400) { 
-              this._success.next(resp.body);
+             // this._success.next(resp.body);
             } else {
             this.mostrarMensaje = true;
             this.mensaje = "Error al desactivar registro";
@@ -134,8 +127,9 @@ export class UserListarComponent implements OnInit{
         if (resp.status < 400) { 
         this.mostrarMensaje = true;
         this.mensaje = resp.body;
-        this._success.next(resp.body);
+        //this._success.next(resp.body);
         this.getUsers_AccesoResponse();
+        this.router.navigate(['/users']);
         } else {
         this.mostrarMensaje = true;
         this.mensaje = "Error al actualizar estado";
@@ -154,8 +148,9 @@ export class UserListarComponent implements OnInit{
         if (resp.status < 400) { 
         this.mostrarMensaje = true;
         this.mensaje = resp.body; 
-        this._success.next(resp.body);
+       // this._success.next(resp.body);
         this.getUsers_AccesoResponse();
+        this.router.navigate(['/users']);
         } else {
         this.mostrarMensaje = true;
         this.mensaje = "Error al actualizar estado";
@@ -167,5 +162,30 @@ export class UserListarComponent implements OnInit{
         }
         )
     }
+
+
+    showStandard() {
+      this.toastService.show('prueba normal');
+    }
+  
+    showSuccess() {
+      this.toastService.show('Prueba exito' , { classname: 'bg-success text-light', delay: 5000 });
+    }
+  
+    showDanger() {
+      this.toastService.show('Prueba error' , { classname: 'bg-danger text-light', delay: 7000 });
+    }
+
+ /*    showStandard(mensaje : string) {
+      this.toastService.show(mensaje);
+    }
+  
+    showSuccess(mensaje : string) {
+      this.toastService.show(mensaje , { classname: 'bg-success text-light', delay: 5000 });
+    }
+  
+    showDanger(mensaje : string) {
+      this.toastService.show(mensaje , { classname: 'bg-danger text-light', delay: 7000 });
+    } */
 
 }
