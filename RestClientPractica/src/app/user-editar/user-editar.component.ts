@@ -3,7 +3,7 @@ import { User } from "../shared/app.model";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ClienteApiRestService } from "../shared/cliente-api-rest.service";
 import { Observable } from "rxjs";
-import { DataService } from "../shared/data.service";
+import { ToastService } from "../toasts/toast-service";
 @Component({
   selector: "app-user-editar",
   templateUrl: "./user-editar.component.html",
@@ -29,7 +29,7 @@ export class EditarUserComponent implements OnInit {
     private ruta: ActivatedRoute,
     private router: Router,
     private clienteApiRest: ClienteApiRestService,
-    private datos: DataService
+    private datos: ToastService
   ) {}
   ngOnInit() {
     console.log("En editar-user");
@@ -65,10 +65,8 @@ export class EditarUserComponent implements OnInit {
         .subscribe(
           (resp) => {
             if (resp.status < 400) {
-              this.datos.cambiarMostrarMensaje(true);
               this.datos.cambiarMensaje(resp.body);
             } else {
-              this.datos.cambiarMostrarMensaje(true);
               this.datos.cambiarMensaje("Error al modificar comentario");
             }
             this.router.navigate(["users"]);

@@ -15,10 +15,8 @@ import { ToastService } from '../toasts/toast-service';
 export class UserListarComponent implements OnInit{
   
   private route : any = '';
-  successMessage = '';
   Users!: User[];
-  mostrarMensaje!: boolean;
-  tipoMensaje!: string;
+  tipoMensaje: string = "success";
   mensaje!: string;
   enabled : boolean | undefined;
 
@@ -26,7 +24,7 @@ export class UserListarComponent implements OnInit{
     private ruta: ActivatedRoute,
     private router: Router,
     private clienteApiRest: ClienteApiRestService,
-    private datos: DataService,
+    private datos: ToastService,
     public toastService: ToastService)
   {this.router.routeReuseStrategy.shouldReuseRoute = () => false;}
 
@@ -37,6 +35,15 @@ export class UserListarComponent implements OnInit{
       .subscribe(params => {
       this.enabled = params['enabled'];
     })
+
+    this.datos.mensajeActual.subscribe(
+      valor => {
+        this.mensaje=valor;
+        if(this.mensaje.length != 0){
+          this.showSuccess(this.mensaje);
+        }
+      }
+    );
 
 
     this.getUsers_AccesoResponse();
@@ -49,7 +56,6 @@ export class UserListarComponent implements OnInit{
     this.Users = resp.body!;
     } else {
     this.mensaje = 'Error al acceder a los datos';
-    this.mostrarMensaje = true;
     }
     },
     err => {
@@ -63,11 +69,9 @@ export class UserListarComponent implements OnInit{
     this.clienteApiRest.borrarUser(String(id)).subscribe(
     resp => {
     if (resp.status < 400) { 
-    this.mostrarMensaje = true;
-    this.mensaje = resp.body; 
+    this.mensaje = resp.body;
     this.getUsers_AccesoResponse();
     } else {
-    this.mostrarMensaje = true;
     this.mensaje = "Error al eliminar registro";
     }
     },
@@ -90,7 +94,6 @@ export class UserListarComponent implements OnInit{
             if (resp.status < 400) {
               //this._success.next(resp.body);
             } else {
-            this.mostrarMensaje = true;
             this.mensaje = "Error al activar el usuario";
             }
             },
@@ -106,7 +109,6 @@ export class UserListarComponent implements OnInit{
             if (resp.status < 400) { 
              // this._success.next(resp.body);
             } else {
-            this.mostrarMensaje = true;
             this.mensaje = "Error al desactivar registro";
             }
             },
@@ -125,13 +127,11 @@ export class UserListarComponent implements OnInit{
       this.clienteApiRest.setUserDisabled(this.Users.map(i => i.id.toString())).subscribe(
         resp => {
         if (resp.status < 400) { 
-        this.mostrarMensaje = true;
         this.mensaje = resp.body;
         //this._success.next(resp.body);
         this.getUsers_AccesoResponse();
         this.router.navigate(['/users']);
         } else {
-        this.mostrarMensaje = true;
         this.mensaje = "Error al actualizar estado";
         }
         },
@@ -146,13 +146,11 @@ export class UserListarComponent implements OnInit{
       this.clienteApiRest.setUserEnabled(this.Users.map(i => i.id.toString())).subscribe(
         resp => {
         if (resp.status < 400) { 
-        this.mostrarMensaje = true;
         this.mensaje = resp.body; 
        // this._success.next(resp.body);
         this.getUsers_AccesoResponse();
         this.router.navigate(['/users']);
         } else {
-        this.mostrarMensaje = true;
         this.mensaje = "Error al actualizar estado";
         }
         },
@@ -164,7 +162,7 @@ export class UserListarComponent implements OnInit{
     }
 
 
-    showStandard() {
+    /*showStandard() {
       this.toastService.show('prueba normal');
     }
   
@@ -174,9 +172,9 @@ export class UserListarComponent implements OnInit{
   
     showDanger() {
       this.toastService.show('Prueba error' , { classname: 'bg-danger text-light', delay: 7000 });
-    }
+    }*/
 
- /*    showStandard(mensaje : string) {
+    showStandard(mensaje : string) {
       this.toastService.show(mensaje);
     }
   
@@ -186,6 +184,6 @@ export class UserListarComponent implements OnInit{
   
     showDanger(mensaje : string) {
       this.toastService.show(mensaje , { classname: 'bg-danger text-light', delay: 7000 });
-    } */
+    }
 
 }
