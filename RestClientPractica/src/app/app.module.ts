@@ -36,6 +36,6 @@ import { ToastsContainer } from './toasts/toasts-container.component';
   providers: [
     ClienteApiRestService,
     DataService],
-  bootstrap: [AppComponent, UserListarComponent]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

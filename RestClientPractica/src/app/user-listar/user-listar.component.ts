@@ -3,7 +3,7 @@ import { ClienteApiRestService } from '../shared/cliente-api-rest.service';
 import { User} from '../shared/app.model';
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { DataService } from '../shared/data.service';
-import { debounceTime, Subject } from 'rxjs';
+import { debounceTime, Subject, Subscription } from 'rxjs';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { ToastService } from '../toasts/toast-service';
 
@@ -19,6 +19,7 @@ export class UserListarComponent implements OnInit{
   tipoMensaje: string = "success";
   mensaje!: string;
   enabled : boolean | undefined;
+  subscription! : Subscription;
 
   constructor(
     private ruta: ActivatedRoute,
@@ -41,7 +42,7 @@ export class UserListarComponent implements OnInit{
       this.enabled = params['enabled'];
     })
 
-    this.datos.mensajeActual.subscribe(
+    this.subscription = this.datos.mensajeActual.subscribe(
       valor => {
         this.mensaje=valor;
         if(this.mensaje.length != 0){
@@ -52,6 +53,10 @@ export class UserListarComponent implements OnInit{
     );
 
     }
+     ngOnDestroy(){
+      this.subscription.unsubscribe();
+
+     }
 
 
 
@@ -185,11 +190,11 @@ export class UserListarComponent implements OnInit{
     }
   
     showSuccess(mensaje : string) {
-      this.datos.show(mensaje , { classname: 'bg-success text-light', delay: 5000 });
+      this.datos.show(mensaje , { classname: 'bg-success text-light', delay: 2500 });
     }
   
     showDanger(mensaje : string) {
-      this.datos.show(mensaje , { classname: 'bg-danger text-light', delay: 7000 });
+      this.datos.show(mensaje , { classname: 'bg-danger text-light', delay: 3500 });
     }
 
 }
