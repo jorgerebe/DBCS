@@ -24,13 +24,18 @@ export class UserListarComponent implements OnInit{
     private ruta: ActivatedRoute,
     private router: Router,
     private clienteApiRest: ClienteApiRestService,
-    private datos: ToastService,
-    public toastService: ToastService)
-  {this.router.routeReuseStrategy.shouldReuseRoute = () => false;}
+    private datos: ToastService)
+  {
+    this.getUsers_AccesoResponse();
+    this.router.events.subscribe((val) =>{
+      this.getUsers_AccesoResponse();
+    })
+  }
 
   @ViewChild('selfClosingAlert', { static: false }) selfClosingAlert!: NgbAlert;
 
   ngOnInit() {
+
     this.ruta.queryParams
       .subscribe(params => {
       this.enabled = params['enabled'];
@@ -40,14 +45,16 @@ export class UserListarComponent implements OnInit{
       valor => {
         this.mensaje=valor;
         if(this.mensaje.length != 0){
-          this.showSuccess(this.mensaje);
+          console.log("suscrito");
+          this.showStandard(this.mensaje);
         }
       }
     );
 
-
-    this.getUsers_AccesoResponse();
     }
+
+
+
     getUsers_AccesoResponse() {
     this.clienteApiRest.getAllUsers_ConResponse(this.enabled).subscribe(
     resp =>{
@@ -63,6 +70,7 @@ export class UserListarComponent implements OnInit{
     throw err;
     }
     )
+
     }
     borrar(id: Number, name: String) {
     if(confirm("¿Seguro que quieres borrar el usuario " + name + "?")){
@@ -92,7 +100,7 @@ export class UserListarComponent implements OnInit{
           this.clienteApiRest.setUserEnabled(ids).subscribe({
             next: resp => {
             if (resp.status < 400) {
-              //this._success.next(resp.body);
+              this.datos.cambiarMensaje(resp.body);
             } else {
             this.mensaje = "Error al activar el usuario";
             }
@@ -107,7 +115,7 @@ export class UserListarComponent implements OnInit{
           this.clienteApiRest.setUserDisabled(ids).subscribe({
             next: resp => {
             if (resp.status < 400) { 
-             // this._success.next(resp.body);
+              this.datos.cambiarMensaje(resp.body);
             } else {
             this.mensaje = "Error al desactivar registro";
             }
@@ -127,10 +135,9 @@ export class UserListarComponent implements OnInit{
       this.clienteApiRest.setUserDisabled(this.Users.map(i => i.id.toString())).subscribe(
         resp => {
         if (resp.status < 400) { 
-        this.mensaje = resp.body;
-        //this._success.next(resp.body);
+        this.datos.cambiarMensaje(resp.body);
         this.getUsers_AccesoResponse();
-        this.router.navigate(['/users']);
+        //this.router.navigate(['/users']);
         } else {
         this.mensaje = "Error al actualizar estado";
         }
@@ -145,11 +152,10 @@ export class UserListarComponent implements OnInit{
     activarTodos(){
       this.clienteApiRest.setUserEnabled(this.Users.map(i => i.id.toString())).subscribe(
         resp => {
-        if (resp.status < 400) { 
-        this.mensaje = resp.body; 
-       // this._success.next(resp.body);
+        if (resp.status < 400) {
+        this.datos.cambiarMensaje(resp.body);
         this.getUsers_AccesoResponse();
-        this.router.navigate(['/users']);
+        //this.router.navigate(['/users']);
         } else {
         this.mensaje = "Error al actualizar estado";
         }
@@ -175,15 +181,15 @@ export class UserListarComponent implements OnInit{
     }*/
 
     showStandard(mensaje : string) {
-      this.toastService.show(mensaje);
+      this.datos.show(mensaje);
     }
   
     showSuccess(mensaje : string) {
-      this.toastService.show(mensaje , { classname: 'bg-success text-light', delay: 5000 });
+      this.datos.show(mensaje , { classname: 'bg-success text-light', delay: 5000 });
     }
   
     showDanger(mensaje : string) {
-      this.toastService.show(mensaje , { classname: 'bg-danger text-light', delay: 7000 });
+      this.datos.show(mensaje , { classname: 'bg-danger text-light', delay: 7000 });
     }
 
 }

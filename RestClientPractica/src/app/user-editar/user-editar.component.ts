@@ -66,6 +66,7 @@ export class EditarUserComponent implements OnInit {
           (resp) => {
             if (resp.status < 400) {
               this.datos.cambiarMensaje(resp.body);
+              console.log("rekek")
             } else {
               this.datos.cambiarMensaje("Error al modificar comentario");
             }

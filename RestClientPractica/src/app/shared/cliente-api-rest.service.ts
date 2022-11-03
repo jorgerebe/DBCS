@@ -23,7 +23,6 @@ export class ClienteApiRestService {
 
         if(enabled !== undefined){
             url = url.substring(0, url.length-1) + "\?enabled" + "=" + enabled;
-            console.log("ehe");
         }
 
         console.log(url);
@@ -43,6 +42,7 @@ export class ClienteApiRestService {
 
     editarUser(id: String, user: User): Observable<HttpResponse<any>> {
         let url = ClienteApiRestService.BASE_URI + id;
+        console.log("enviando mensaje api");
         return this.http.put(url, user, { observe: 'response', responseType: 'text'});
     }
 
