@@ -3,6 +3,8 @@ import { Role, User } from "../shared/app.model";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ClienteApiRestService } from "../shared/cliente-api-rest.service";
 import { DataService } from "../shared/data.service";
+import { ToastService } from "../toasts/toast-service";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-user-crear',
@@ -12,8 +14,8 @@ import { DataService } from "../shared/data.service";
 export class CrearUserComponent implements OnInit {
 
   roles= Role;
-  mostrarMensaje!: boolean;
   mensaje!: string;
+  subscription! : Subscription;
 
   userVacio = {
     id: 0,
@@ -35,14 +37,21 @@ export class CrearUserComponent implements OnInit {
     private ruta: ActivatedRoute,
     private router: Router,
     private clienteApiRest: ClienteApiRestService,
-    private datos: DataService
+    private datos: ToastService
   ) {}
 
   ngOnInit(): void {
-    this.mostrarMensaje = false;
-    this.mensaje = "";
     
     console.log("En crear-user");
+
+    this.subscription = this.datos.mensajeActual.subscribe(
+      valor => {
+        this.mensaje=valor;
+        if(this.mensaje.length != 0){
+          this.showStandard(this.mensaje);
+        }
+      }
+    );
 
     this.ruta.paramMap.subscribe(
       (params) => {
@@ -53,30 +62,33 @@ export class CrearUserComponent implements OnInit {
 
   }
 
+  ngOnDestroy(){
+    this.subscription.unsubscribe();
+  }
+
   onSubmit():void{
     console.log(this.user);
     console.log("Enviado formulario");
     this.clienteApiRest.anadirUser(this.user).subscribe(
       (resp) => {
         if (resp.status < 400) {
-          this.mostrarMensaje = false;
-          this.mensaje = "";
-          this.datos.cambiarMostrarMensaje(true);
           this.datos.cambiarMensaje(resp.body);
         } else {
-          this.datos.cambiarMostrarMensaje(true);
           this.datos.cambiarMensaje("Error al añadir user");
         }
-        this.router.navigate(["users"]);
+        this.router.navigate(["/users"]);
       },
       (err) => {
         let error = JSON.parse(err.error);
-        this.mostrarMensaje = true;
-        this.mensaje = error.message;
+        this.datos.cambiarMensaje(error.message);
         console.log("Error al crear: " + error.message);
         throw err;
       }
     );
+  }
+
+  showStandard(mensaje : string) {
+    this.datos.show(mensaje);
   }
 
 }

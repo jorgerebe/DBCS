@@ -5,9 +5,9 @@ import { EditarUserComponent } from './user-editar/user-editar.component';
 import { CrearUserComponent } from './user-crear/user-crear.component';
 
 const routes: Routes = [
-  {path: 'users', component:UserListarComponent},
-  {path: 'users/:id/editar', component:EditarUserComponent},
-  {path: 'users/nuevo', component:CrearUserComponent},
+  {path: 'users', component:UserListarComponent, title:'Gestor Usuarios'},
+  {path: 'users/:id/editar', component:EditarUserComponent, title:'Editar usuario'},
+  {path: 'users/nuevo', component:CrearUserComponent, title:'Añadir usuario'},
   {path: '**', redirectTo:'users',pathMatch:'full'}
 ];
 

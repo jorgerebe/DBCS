@@ -10,16 +10,17 @@ export class ToastService {
 	tipoActual = this.tipo.asObservable();
 
 	show(textOrTpl: string | TemplateRef<any>, options: any = {}) {
-		//if(this.toasts.length == 0){
-		this.toasts.push({ textOrTpl, ...options });//}
+		this.toasts.push({ textOrTpl, ...options });
 	}
 
 	remove(toast: any) {
 		this.toasts = this.toasts.filter((t) => t !== toast);
+		this.mensaje.next("");
 	}
 
 	clear() {
 		this.toasts.splice(0, this.toasts.length);
+		this.mensaje.next("");
 	}
 
 	cambiarMensaje(mensaje: string) {
@@ -28,5 +29,9 @@ export class ToastService {
 
 	cambiarTipo(tipo : string){
 		this.tipo.next(tipo);
+	}
+
+	size(){
+		return this.toasts.length;
 	}
 }

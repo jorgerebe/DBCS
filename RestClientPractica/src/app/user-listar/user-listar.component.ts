@@ -1,9 +1,8 @@
-import { Component, OnChanges, OnInit,ViewChild, ɵɵqueryRefresh } from '@angular/core';
+import { Component, OnInit,ViewChild } from '@angular/core';
 import { ClienteApiRestService } from '../shared/cliente-api-rest.service';
 import { User} from '../shared/app.model';
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
-import { DataService } from '../shared/data.service';
-import { debounceTime, Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
 import { ToastService } from '../toasts/toast-service';
 
@@ -27,40 +26,37 @@ export class UserListarComponent implements OnInit{
     private clienteApiRest: ClienteApiRestService,
     private datos: ToastService)
   {
-    this.getUsers_AccesoResponse();
-    this.router.events.subscribe((val) =>{
-      this.getUsers_AccesoResponse();
-    })
   }
 
   @ViewChild('selfClosingAlert', { static: false }) selfClosingAlert!: NgbAlert;
 
   ngOnInit() {
-
-    this.ruta.queryParams
-      .subscribe(params => {
-      this.enabled = params['enabled'];
-    })
-
     this.subscription = this.datos.mensajeActual.subscribe(
       valor => {
         this.mensaje=valor;
         if(this.mensaje.length != 0){
           console.log("suscrito");
-          this.showStandard(this.mensaje);
+          this.showStandard(this.mensaje, "success");
         }
       }
     );
 
+    this.ruta.queryParams.subscribe(
+      params => {
+        this.enabled = params['enabled'];
+        this.getUsers_AccesoResponse();
+      }
+    )
+
     }
      ngOnDestroy(){
       this.subscription.unsubscribe();
-
      }
 
 
 
     getUsers_AccesoResponse() {
+
     this.clienteApiRest.getAllUsers_ConResponse(this.enabled).subscribe(
     resp =>{
     
@@ -142,7 +138,6 @@ export class UserListarComponent implements OnInit{
         if (resp.status < 400) { 
         this.datos.cambiarMensaje(resp.body);
         this.getUsers_AccesoResponse();
-        //this.router.navigate(['/users']);
         } else {
         this.mensaje = "Error al actualizar estado";
         }
@@ -160,7 +155,6 @@ export class UserListarComponent implements OnInit{
         if (resp.status < 400) {
         this.datos.cambiarMensaje(resp.body);
         this.getUsers_AccesoResponse();
-        //this.router.navigate(['/users']);
         } else {
         this.mensaje = "Error al actualizar estado";
         }
@@ -185,8 +179,8 @@ export class UserListarComponent implements OnInit{
       this.toastService.show('Prueba error' , { classname: 'bg-danger text-light', delay: 7000 });
     }*/
 
-    showStandard(mensaje : string) {
-      this.datos.show(mensaje);
+    showStandard(mensaje : string, tipo:string) {
+      this.datos.show(mensaje, {classname : 'bg-' + tipo, delay:2500});
     }
   
     showSuccess(mensaje : string) {

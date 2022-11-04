@@ -94,6 +94,11 @@ public class UsersRest {
         User existente = repository.findById(id)
                 .orElseThrow(() -> new UserException("No se ha encontrado el usuario con id: " + id + "."));
 
+
+        if(repository.existsUserByEmailAndIdNot(user.getEmail(), id)){
+            throw new UserException("El email especificado ya está en uso");
+        }
+
         existente.setFirstName(user.getFirstName());
         existente.setLastName(user.getLastName());
         existente.setEmail(user.getEmail());

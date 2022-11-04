@@ -33,6 +33,7 @@ export class EditarUserComponent implements OnInit {
   ) {}
   ngOnInit() {
     console.log("En editar-user");
+    this.datos.clear();
 
     this.operacion =
       this.ruta.snapshot.url[this.ruta.snapshot.url.length - 1].path;
@@ -66,11 +67,11 @@ export class EditarUserComponent implements OnInit {
           (resp) => {
             if (resp.status < 400) {
               this.datos.cambiarMensaje(resp.body);
-              console.log("rekek")
+              console.log("Usuario editado")
             } else {
               this.datos.cambiarMensaje("Error al modificar comentario");
             }
-            this.router.navigate(["users"]);
+            this.router.navigate(["/users"]);
           },
           (err) => {
             console.log("Error al editar: " + err.message);

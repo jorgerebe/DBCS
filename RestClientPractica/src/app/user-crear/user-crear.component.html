@@ -1,3 +1,4 @@
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
 <h3 class="titulo">Creación de usuario</h3>
 <div class="container offset-sm-3">
     <div class="col-sm-12">
@@ -81,16 +82,6 @@
                   </div>
                </div>
             </div>
-
-
-
-          <!-- <div class="form-check form-switch offset-sm-1 col-sm-3">
-             <label *ngIf="user.enabled" class="form-check-label" for="enabled">Activado</label>
-             <label *ngIf="!user.enabled" class="form-check-label" for="enabled">Desactivado</label>
- 
-             <input type="checkbox" [defaultChecked]="true" class="form-check-input" required name="enabled"
-             [ngModel]="user.enabled" disabled>
-          </div> -->
        </div> 
 
        <div class="form-group row">
@@ -104,7 +95,6 @@
          </div>
        </div>
       <div class="form-group row-3">
-         <p class="text-danger" *ngIf=mostrarMensaje>{{mensaje}}</p>
       </div>
        </form>
     </div>
