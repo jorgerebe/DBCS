@@ -3,6 +3,7 @@ import { User } from "../shared/app.model";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ClienteApiRestService } from "../shared/cliente-api-rest.service";
 import { Observable } from "rxjs";
+import { Subscription } from 'rxjs';
 import { ToastService } from "../toasts/toast-service";
 @Component({
   selector: "app-user-editar",
@@ -22,8 +23,14 @@ export class EditarUserComponent implements OnInit {
     createdAt: new Date(),
     updatedAt: new Date(),
   };
+
+  subscriptionTipo !: Subscription;
+  subscriptionMensaje! : Subscription;
+
   user = this.userVacio as User;
   id!: String;
+  tipoMensaje!: string;
+  mensaje!: string;
   operacion!: String;
   constructor(
     private ruta: ActivatedRoute,
@@ -34,6 +41,22 @@ export class EditarUserComponent implements OnInit {
   ngOnInit() {
     console.log("En editar-user");
     this.datos.clear();
+
+    this.subscriptionTipo = this.datos.tipoActual.subscribe(
+      valor => {
+        this.tipoMensaje=valor;
+      }
+    )
+
+    this.subscriptionMensaje = this.datos.mensajeActual.subscribe(
+      valor => {
+        this.mensaje=valor;
+        if(this.mensaje.length != 0){
+          console.log("suscrito");
+          this.showToast(this.mensaje, this.tipoMensaje);
+        }
+      }
+    );
 
     this.operacion =
       this.ruta.snapshot.url[this.ruta.snapshot.url.length - 1].path;
@@ -58,6 +81,11 @@ export class EditarUserComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(){
+    this.subscriptionMensaje.unsubscribe();
+    this.subscriptionTipo.unsubscribe();
+   }
+
   onSubmit() {
     console.log("Enviado formulario");
     if (this.id) {
@@ -66,6 +94,7 @@ export class EditarUserComponent implements OnInit {
         .subscribe(
           (resp) => {
             if (resp.status < 400) {
+              this.datos.cambiarTipo("success");
               this.datos.cambiarMensaje(resp.body);
               console.log("Usuario editado")
             } else {
@@ -74,11 +103,17 @@ export class EditarUserComponent implements OnInit {
             this.router.navigate(["/users"]);
           },
           (err) => {
-            console.log("Error al editar: " + err.message);
-            throw err;
+            let error = JSON.parse(err.error);
+            this.datos.cambiarTipo("danger")
+            this.datos.cambiarMensaje(error.message);
+            console.log("Error al editar: " + error.message);
           }
         );
     }
+  }
+
+  showToast(mensaje : string, tipo:string) {
+    this.datos.show(mensaje, {classname : 'bg-' + tipo, delay:2500});
   }
 
 

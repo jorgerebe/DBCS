@@ -30,8 +30,4 @@ export class ToastService {
 	cambiarTipo(tipo : string){
 		this.tipo.next(tipo);
 	}
-
-	size(){
-		return this.toasts.length;
-	}
 }

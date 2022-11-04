@@ -15,7 +15,10 @@ export class CrearUserComponent implements OnInit {
 
   roles= Role;
   mensaje!: string;
-  subscription! : Subscription;
+  tipoMensaje: string = "success";
+
+  subscriptionTipo !: Subscription;
+  subscriptionMensaje! : Subscription;
 
   userVacio = {
     id: 0,
@@ -44,11 +47,17 @@ export class CrearUserComponent implements OnInit {
     
     console.log("En crear-user");
 
-    this.subscription = this.datos.mensajeActual.subscribe(
+    this.subscriptionTipo = this.datos.tipoActual.subscribe(
+      valor => {
+        this.tipoMensaje=valor;
+      }
+    )
+
+    this.subscriptionMensaje = this.datos.mensajeActual.subscribe(
       valor => {
         this.mensaje=valor;
         if(this.mensaje.length != 0){
-          this.showStandard(this.mensaje);
+          this.showToast(this.mensaje, this.tipoMensaje);
         }
       }
     );
@@ -63,7 +72,8 @@ export class CrearUserComponent implements OnInit {
   }
 
   ngOnDestroy(){
-    this.subscription.unsubscribe();
+    this.subscriptionMensaje.unsubscribe();
+    this.subscriptionTipo.unsubscribe();
   }
 
   onSubmit():void{
@@ -72,6 +82,7 @@ export class CrearUserComponent implements OnInit {
     this.clienteApiRest.anadirUser(this.user).subscribe(
       (resp) => {
         if (resp.status < 400) {
+          this.datos.cambiarTipo("success");
           this.datos.cambiarMensaje(resp.body);
         } else {
           this.datos.cambiarMensaje("Error al añadir user");
@@ -80,6 +91,7 @@ export class CrearUserComponent implements OnInit {
       },
       (err) => {
         let error = JSON.parse(err.error);
+        this.datos.cambiarTipo("danger")
         this.datos.cambiarMensaje(error.message);
         console.log("Error al crear: " + error.message);
         throw err;
@@ -87,8 +99,8 @@ export class CrearUserComponent implements OnInit {
     );
   }
 
-  showStandard(mensaje : string) {
-    this.datos.show(mensaje);
+  showToast(mensaje : string, tipo:string) {
+    this.datos.show(mensaje, {classname : 'bg-' + tipo, delay:2500});
   }
 
 }

@@ -15,10 +15,12 @@ export class UserListarComponent implements OnInit{
   
   private route : any = '';
   Users!: User[];
-  tipoMensaje: string = "success";
+  tipoMensaje!: string;
   mensaje!: string;
   enabled : boolean | undefined;
-  subscription! : Subscription;
+
+  subscriptionTipo !: Subscription;
+  subscriptionMensaje! : Subscription;
 
   constructor(
     private ruta: ActivatedRoute,
@@ -31,12 +33,19 @@ export class UserListarComponent implements OnInit{
   @ViewChild('selfClosingAlert', { static: false }) selfClosingAlert!: NgbAlert;
 
   ngOnInit() {
-    this.subscription = this.datos.mensajeActual.subscribe(
+
+    this.subscriptionTipo = this.datos.tipoActual.subscribe(
+      valor => {
+        this.tipoMensaje=valor;
+      }
+    )
+
+    this.subscriptionMensaje = this.datos.mensajeActual.subscribe(
       valor => {
         this.mensaje=valor;
         if(this.mensaje.length != 0){
           console.log("suscrito");
-          this.showStandard(this.mensaje, "success");
+          this.showToast(this.mensaje, this.tipoMensaje);
         }
       }
     );
@@ -50,7 +59,8 @@ export class UserListarComponent implements OnInit{
 
     }
      ngOnDestroy(){
-      this.subscription.unsubscribe();
+      this.subscriptionMensaje.unsubscribe();
+      this.subscriptionTipo.unsubscribe();
      }
 
 
@@ -78,10 +88,11 @@ export class UserListarComponent implements OnInit{
     this.clienteApiRest.borrarUser(String(id)).subscribe(
     resp => {
     if (resp.status < 400) { 
-    this.mensaje = resp.body;
-    this.getUsers_AccesoResponse();
+      this.datos.cambiarTipo("danger");
+      this.datos.cambiarMensaje(resp.body);
+      this.getUsers_AccesoResponse();
     } else {
-    this.mensaje = "Error al eliminar registro";
+      this.mensaje = "Error al eliminar registro";
     }
     },
     err=> {
@@ -101,6 +112,7 @@ export class UserListarComponent implements OnInit{
           this.clienteApiRest.setUserEnabled(ids).subscribe({
             next: resp => {
             if (resp.status < 400) {
+              this.datos.cambiarTipo('info');
               this.datos.cambiarMensaje(resp.body);
             } else {
             this.mensaje = "Error al activar el usuario";
@@ -116,6 +128,7 @@ export class UserListarComponent implements OnInit{
           this.clienteApiRest.setUserDisabled(ids).subscribe({
             next: resp => {
             if (resp.status < 400) { 
+              this.datos.cambiarTipo('info');
               this.datos.cambiarMensaje(resp.body);
             } else {
             this.mensaje = "Error al desactivar registro";
@@ -136,6 +149,7 @@ export class UserListarComponent implements OnInit{
       this.clienteApiRest.setUserDisabled(this.Users.map(i => i.id.toString())).subscribe(
         resp => {
         if (resp.status < 400) { 
+          this.datos.cambiarTipo('success');
         this.datos.cambiarMensaje(resp.body);
         this.getUsers_AccesoResponse();
         } else {
@@ -153,6 +167,7 @@ export class UserListarComponent implements OnInit{
       this.clienteApiRest.setUserEnabled(this.Users.map(i => i.id.toString())).subscribe(
         resp => {
         if (resp.status < 400) {
+        this.datos.cambiarTipo('success');
         this.datos.cambiarMensaje(resp.body);
         this.getUsers_AccesoResponse();
         } else {
@@ -166,29 +181,8 @@ export class UserListarComponent implements OnInit{
         )
     }
 
-
-    /*showStandard() {
-      this.toastService.show('prueba normal');
-    }
-  
-    showSuccess() {
-      this.toastService.show('Prueba exito' , { classname: 'bg-success text-light', delay: 5000 });
-    }
-  
-    showDanger() {
-      this.toastService.show('Prueba error' , { classname: 'bg-danger text-light', delay: 7000 });
-    }*/
-
-    showStandard(mensaje : string, tipo:string) {
+    showToast(mensaje : string, tipo:string) {
       this.datos.show(mensaje, {classname : 'bg-' + tipo, delay:2500});
-    }
-  
-    showSuccess(mensaje : string) {
-      this.datos.show(mensaje , { classname: 'bg-success text-light', delay: 2500 });
-    }
-  
-    showDanger(mensaje : string) {
-      this.datos.show(mensaje , { classname: 'bg-danger text-light', delay: 3500 });
     }
 
 }
