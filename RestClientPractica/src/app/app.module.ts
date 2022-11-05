@@ -14,6 +14,7 @@ import { CrearUserComponent } from './user-crear/user-crear.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { ToastsContainer } from './shared/toasts-container.component';
+import { ToastService } from './shared/toast-service';
 
 
 
@@ -34,7 +35,7 @@ import { ToastsContainer } from './shared/toasts-container.component';
   ],
   providers: [
     ClienteApiRestService,
-    DataService],
+    ToastService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
