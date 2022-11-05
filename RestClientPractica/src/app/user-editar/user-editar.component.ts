@@ -2,9 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { User } from "../shared/app.model";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ClienteApiRestService } from "../shared/cliente-api-rest.service";
-import { Observable } from "rxjs";
 import { Subscription } from 'rxjs';
-import { ToastService } from "../toasts/toast-service";
+import { ToastService } from "../shared/toast-service";
 @Component({
   selector: "app-user-editar",
   templateUrl: "./user-editar.component.html",

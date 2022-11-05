@@ -2,9 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { Role, User } from "../shared/app.model";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ClienteApiRestService } from "../shared/cliente-api-rest.service";
-import { DataService } from "../shared/data.service";
-import { ToastService } from "../toasts/toast-service";
 import { Subscription } from "rxjs";
+import { ToastService } from "../shared/toast-service";
 
 @Component({
   selector: 'app-user-crear',

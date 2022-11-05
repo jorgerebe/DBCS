@@ -8,13 +8,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { ClienteApiRestService } from './shared/cliente-api-rest.service';
-import { DataService } from './shared/data.service';
 import { UserListarComponent } from './user-listar/user-listar.component';
 import { EditarUserComponent } from './user-editar/user-editar.component';
 import { CrearUserComponent } from './user-crear/user-crear.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { ToastsContainer } from './toasts/toasts-container.component';
+import { ToastsContainer } from './shared/toasts-container.component';
 
 
 

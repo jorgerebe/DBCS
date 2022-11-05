@@ -4,7 +4,7 @@ import { User} from '../shared/app.model';
 import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { Subscription } from 'rxjs';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
-import { ToastService } from '../toasts/toast-service';
+import { ToastService } from '../shared/toast-service';
 
 @Component({
   selector: 'app-user-listar',
