@@ -77,7 +77,7 @@
                      <label *ngIf="user.enabled" class="form-check-label" for="enabled">Activado</label>
                      <label *ngIf="!user.enabled" class="form-check-label" for="enabled">Desactivado</label>
    
-                     <input type="checkbox" class=" form-check-input" required name="enabled"
+                     <input type="checkbox" checked class=" form-check-input" required name="enabled"
                      [ngModel]="user.enabled" disabled>
                   </div>
                </div>

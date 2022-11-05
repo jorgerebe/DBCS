@@ -11,16 +11,15 @@ export class ToastService {
 
 	show(textOrTpl: string | TemplateRef<any>, options: any = {}) {
 		this.toasts.push({ textOrTpl, ...options });
+		this.mensaje.next("");
 	}
 
 	remove(toast: any) {
 		this.toasts = this.toasts.filter((t) => t !== toast);
-		this.mensaje.next("");
 	}
 
 	clear() {
 		this.toasts.splice(0, this.toasts.length);
-		this.mensaje.next("");
 	}
 
 	cambiarMensaje(mensaje: string) {

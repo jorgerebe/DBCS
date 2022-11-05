@@ -40,7 +40,6 @@ export class EditarUserComponent implements OnInit {
   ) {}
   ngOnInit() {
     console.log("En editar-user");
-    this.datos.clear();
 
     this.subscriptionTipo = this.datos.tipoActual.subscribe(
       valor => {
@@ -98,7 +97,7 @@ export class EditarUserComponent implements OnInit {
               this.datos.cambiarMensaje(resp.body);
               console.log("Usuario editado")
             } else {
-              this.datos.cambiarMensaje("Error al modificar comentario");
+              this.datos.cambiarMensaje("Error al modificar usuario");
             }
             this.router.navigate(["/users"]);
           },
@@ -115,6 +114,4 @@ export class EditarUserComponent implements OnInit {
   showToast(mensaje : string, tipo:string) {
     this.datos.show(mensaje, {classname : 'bg-' + tipo, delay:2500});
   }
-
-
 }
