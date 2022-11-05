@@ -6,7 +6,12 @@ export interface User {
     email: String,
     password: String,
     enabled: boolean,
-    role: String,
+    role: Role,
     createdAt: Date,
     updatedAt: Date
     }
+
+export enum Role{
+    HOST = 'HOST',
+    GUEST = 'GUEST'
+}

@@ -1,0 +1,9 @@
+.form-group{
+    margin-bottom: 2rem !important;
+    --bs-gutter-y: 1.5rem;
+    --bs-gutter-x: 1.5rem;
+}
+
+.titulo{
+    margin-bottom: 3rem;
+}

@@ -1,0 +1,101 @@
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+<h3 class="titulo mt-4 offset-sm-3">Creación de usuario</h3>
+<div class="container">
+    <div class="offset-sm-3 col-sm-9">
+       <form (ngSubmit)="userForm.form.valid && onSubmit()" #userForm="ngForm">
+       <div class="form-group row">
+        <div class="offset-sm-0 col-sm-3">
+            <label class="control-label" for="name">Apodo</label>
+             <input type="text" class="form-control"
+             required
+             [(ngModel)]="user.name" name="name" #name="ngModel"
+             [ngClass]="{ 'is-invalid': name.invalid }">
+             <div class="invalid-feedback" *ngIf="firstName.invalid">
+               <p *ngIf="name.errors?.['required']">El apodo es obligatorio.</p>
+            </div>
+          </div>
+         </div>
+       <div class="form-group row">
+          <div class="col-sm-3">
+             <label class="control-label" for="firstName">Nombre</label>
+             <input type="text" class="form-control"
+             required
+             [(ngModel)]="user.firstName" name="firstName" #firstName="ngModel"
+             [ngClass]="{ 'is-invalid': firstName.invalid }">
+             <div class="invalid-feedback" *ngIf="firstName.invalid">
+                <p *ngIf="firstName.errors?.['required']">El nombre es obligatorio.</p>
+             </div>
+          </div>
+          <div class="col-sm-3">
+             <label class="control-label" for="lastName">Apellido</label>
+             <input type="text" class="form-control"
+             required
+             [(ngModel)]="user.lastName" name="lastName" #lastName="ngModel"
+             [ngClass]="{ 'is-invalid': lastName.invalid }">
+             <div class="invalid-feedback" *ngIf="lastName.invalid">
+                <p *ngIf="lastName.errors?.['required']">El apellido es obligatorio.</p>
+             </div>
+          </div>
+       </div>
+       <div class="form-group row">
+          <div class="col-sm-3">
+             <label class="control-label" name="email" for="email">Correo electrónico</label>
+             <input type="text" class="form-control" 
+             required
+             [(ngModel)]="user.email" name="email" #email="ngModel"
+             [ngClass]="{ 'is-invalid': email.invalid }" email>
+             <div class="invalid-feedback" *ngIf="email.invalid">
+                <p *ngIf="email.errors?.['required']">El correo electrónico es obligatorio.</p>
+                <p *ngIf="email.errors?.['email']">Introduzca un correo electrónico correcto.</p>
+             </div>
+          </div>
+       
+          <div class="col-sm-3">
+             <label class="control-label" for="password">Contraseña</label>
+             <input type="password" class="form-control" required
+             [(ngModel)]="user.password" name="password" #password=ngModel 
+             [ngClass]="{ 'is-invalid': password.invalid }"password minlength="8" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$">
+             <div class="invalid-feedback" *ngIf="password.invalid">
+                <p *ngIf="password.errors?.['required']">La contraseña es obligatoria.</p>
+                <p *ngIf="password.errors?.['pattern']">La contraseña debe ser mínimo de 8 caracteres y debe contener mayusculas, minusculas y números.</p>
+             </div>
+          </div>
+       </div>
+ 
+       <div class="form-group row">
+            <div class="col-sm-3">
+               <label class="control-label" for="role">Rol</label>
+               <select class="form-select form-select-sm" [(ngModel)]="user.role" name="role" #role=ngModel>
+                  <option *ngFor="let role of roles | keyvalue" [ngValue]="role.value">{{role.value}}</option>
+               </select>
+            </div>
+          
+            <div class="form-check col-sm-3">
+               <label class="control-label" for="role">Estado</label>
+               <div class="row form-switch align-items-center h-50" >
+                  <div>
+                     <label *ngIf="user.enabled" class="form-check-label" for="enabled">Activado</label>
+                     <label *ngIf="!user.enabled" class="form-check-label" for="enabled">Desactivado</label>
+   
+                     <input type="checkbox" checked class=" form-check-input" required name="enabled"
+                     [ngModel]="user.enabled" disabled>
+                  </div>
+               </div>
+            </div>
+       </div> 
+
+       <div class="form-group row">
+          <div class="offset-sm-4 col-sm-1 d-grid gap-2">
+             <button type="submit" class="btn btn-primary btn-block" [disabled]="!userForm.form.valid">
+             Aceptar </button>
+          </div>
+          <div class="col-sm-1">
+            <button type="reset" class="btn btn-primary btn-block">
+            Borrar</button>
+         </div>
+       </div>
+      <div class="form-group row-3">
+      </div>
+       </form>
+    </div>
+ </div>

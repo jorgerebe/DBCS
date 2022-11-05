@@ -9,7 +9,6 @@ import com.uva.dbcs.grupo7.APIPractica.Model.User;
 import com.uva.dbcs.grupo7.APIPractica.Exception.UserException;
 import com.uva.dbcs.grupo7.APIPractica.Repository.UserRepository;
 
-
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "*")
 public class UsersRest {
 
     private final UserRepository repository;
@@ -40,6 +40,15 @@ public class UsersRest {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public String newVino(@RequestBody User newUser, HttpServletResponse response) {
         response.setHeader("Content-type", "application/json");
+
+        if(repository.existsUserByName(newUser.getName())){
+            throw new UserException("Ya existe un usuario con el nombre especificado");
+        }
+
+        if(repository.existsUserByEmail(newUser.getEmail())){
+            throw new UserException("El email especificado ya está en uso");
+        }
+
         try {
             repository.save(newUser);
             return "Nuevo registro creado";
@@ -82,17 +91,22 @@ public class UsersRest {
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable Integer id, @RequestBody User user) {
-        User existente = repository.findById(id).orElseThrow(() -> new UserException("No se ha encontrado el usuario con id: " + id + "."));
+        User existente = repository.findById(id)
+                .orElseThrow(() -> new UserException("No se ha encontrado el usuario con id: " + id + "."));
+
+
+        if(repository.existsUserByEmailAndIdNot(user.getEmail(), id)){
+            throw new UserException("El email especificado ya está en uso");
+        }
 
         existente.setFirstName(user.getFirstName());
         existente.setLastName(user.getLastName());
         existente.setEmail(user.getEmail());
         existente.setPassword(user.getPassword());
 
-        try{
-            repository.save(existente);   
-        }
-        catch(Exception e){
+        try {
+            repository.save(existente);
+        } catch (Exception e) {
             throw new UserException("Error al actualizar los datos del usuario especificado");
         }
 
@@ -102,9 +116,9 @@ public class UsersRest {
     /**
      * Modifica los datos del usuario a partir del Identificador proporcionado.
      * 
-     * @param id    Id del usuario a eliminar
+     * @param id Id del usuario a eliminar
      * @return Mensaje de exito/error.
-     * @throws 
+     * @throws
      */
 
     @DeleteMapping("/{id}")
@@ -119,9 +133,11 @@ public class UsersRest {
     }
 
     /**
-     * Consulta los usuarios que están habilitados o deshabilitados, según {@code param}
-     *  
-     * @param enabled si es {@code true} se devolverán los usuarios habilitados, los inhabilitados si es {@code false}
+     * Consulta los usuarios que están habilitados o deshabilitados, según
+     * {@code param}
+     * 
+     * @param enabled si es {@code true} se devolverán los usuarios habilitados, los
+     *                inhabilitados si es {@code false}
      * @return los usuarios habilitados o inhabilitados
      */
 
@@ -132,7 +148,8 @@ public class UsersRest {
     }
 
     /**
-     * Activa a los usuarios existentes cuyo id se encuentra en la lista de ids {@code user_id}
+     * Activa a los usuarios existentes cuyo id se encuentra en la lista de ids
+     * {@code user_id}
      * 
      * @param user_id Lista de usuarios a habilitar
      * @return Mensaje de exito/error.
@@ -143,22 +160,22 @@ public class UsersRest {
 
         List<User> users = repository.findByIdIn(user_id);
 
-        for(User user : users){
+        for (User user : users) {
             user.setEnabled(true);
         }
 
-        try{
+        try {
             repository.saveAll(users);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             throw new UserException("Error al habilitar los usuarios especificados");
         }
 
-        return "Usuarios modificados.";
+        return "El estado de los usuarios elegidos ha sido activado";
     }
 
     /**
-     * Desactiva a los usuarios existentes cuyo id se encuentra en la lista de ids {@code user_id}
+     * Desactiva a los usuarios existentes cuyo id se encuentra en la lista de ids
+     * {@code user_id}
      * 
      * @param user_id Lista de usuarios a inhabilitar
      * @return Mensaje de exito/error.
@@ -169,17 +186,16 @@ public class UsersRest {
 
         List<User> users = repository.findByIdIn(user_id);
 
-        for(User user : users){
+        for (User user : users) {
             user.setEnabled(false);
         }
 
-        try{
+        try {
             repository.saveAll(users);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             throw new UserException("Error al inhabilitar los usuarios especificados");
         }
 
-        return "Usuarios modificados.";
+        return "El estado de los usuarios elegidos ha sido desactivado";
     }
 }

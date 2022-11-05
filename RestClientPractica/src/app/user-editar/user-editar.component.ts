@@ -2,8 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { User } from "../shared/app.model";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ClienteApiRestService } from "../shared/cliente-api-rest.service";
-import { Observable } from "rxjs";
-import { DataService } from "../shared/data.service";
+import { Subscription } from 'rxjs';
+import { ToastService } from "../shared/toast-service";
 @Component({
   selector: "app-user-editar",
   templateUrl: "./user-editar.component.html",
@@ -22,17 +22,39 @@ export class EditarUserComponent implements OnInit {
     createdAt: new Date(),
     updatedAt: new Date(),
   };
+
+  subscriptionTipo !: Subscription;
+  subscriptionMensaje! : Subscription;
+
   user = this.userVacio as User;
   id!: String;
+  tipoMensaje!: string;
+  mensaje!: string;
   operacion!: String;
   constructor(
     private ruta: ActivatedRoute,
     private router: Router,
     private clienteApiRest: ClienteApiRestService,
-    private datos: DataService
+    private datos: ToastService
   ) {}
   ngOnInit() {
     console.log("En editar-user");
+
+    this.subscriptionTipo = this.datos.tipoActual.subscribe(
+      valor => {
+        this.tipoMensaje=valor;
+      }
+    )
+
+    this.subscriptionMensaje = this.datos.mensajeActual.subscribe(
+      valor => {
+        this.mensaje=valor;
+        if(this.mensaje.length != 0){
+          console.log("suscrito");
+          this.showToast(this.mensaje, this.tipoMensaje);
+        }
+      }
+    );
 
     this.operacion =
       this.ruta.snapshot.url[this.ruta.snapshot.url.length - 1].path;
@@ -57,44 +79,38 @@ export class EditarUserComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(){
+    this.subscriptionMensaje.unsubscribe();
+    this.subscriptionTipo.unsubscribe();
+   }
+
   onSubmit() {
     console.log("Enviado formulario");
     if (this.id) {
       this.clienteApiRest
-        .modificarPrecio(String(this.user.id), this.user)
+        .editarUser(String(this.user.id), this.user)
         .subscribe(
           (resp) => {
             if (resp.status < 400) {
-              this.datos.cambiarMostrarMensaje(true);
+              this.datos.cambiarTipo("success");
               this.datos.cambiarMensaje(resp.body);
+              console.log("Usuario editado")
             } else {
-              this.datos.cambiarMostrarMensaje(true);
-              this.datos.cambiarMensaje("Error al modificar comentario");
+              this.datos.cambiarMensaje("Error al modificar usuario");
             }
-            this.router.navigate(["users"]);
+            this.router.navigate(["/users"]);
           },
           (err) => {
-            console.log("Error al editar: " + err.message);
-            throw err;
+            let error = JSON.parse(err.error);
+            this.datos.cambiarTipo("danger")
+            this.datos.cambiarMensaje(error.message);
+            console.log("Error al editar: " + error.message);
           }
         );
-    } else {
-      this.clienteApiRest.anadirUser(this.user).subscribe(
-        (resp) => {
-          if (resp.status < 400) {
-            this.datos.cambiarMostrarMensaje(true);
-            this.datos.cambiarMensaje(resp.body);
-          } else {
-            this.datos.cambiarMostrarMensaje(true);
-            this.datos.cambiarMensaje("Error al añadir user");
-          }
-          this.router.navigate(["users"]);
-        },
-        (err) => {
-          console.log("Error al editar: " + err.message);
-          throw err;
-        }
-      );
     }
+  }
+
+  showToast(mensaje : string, tipo:string) {
+    this.datos.show(mensaje, {classname : 'bg-' + tipo, delay:2500});
   }
 }

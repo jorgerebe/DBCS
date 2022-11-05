@@ -1,3 +1,8 @@
 .actions a{
-    margin-right: 3px;
+    margin: 0 0.4rem;
 }
+
+td i{
+    font-style: normal !important;
+}
+
