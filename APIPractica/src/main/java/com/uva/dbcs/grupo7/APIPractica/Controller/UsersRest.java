@@ -198,4 +198,12 @@ public class UsersRest {
 
         return "El estado de los usuarios elegidos ha sido desactivado";
     }
+    @GetMapping(params= "email")
+    public User getByMail(@RequestParam String email){
+        User user = repository.findByEmail(email).orElseThrow(() -> new UserException("No se ha encontrado el usuario con email: " + email + "."));;
+        return user;
+        
+        
+        
+    }
 }
