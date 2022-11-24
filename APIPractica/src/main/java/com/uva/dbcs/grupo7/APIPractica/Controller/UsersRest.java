@@ -13,6 +13,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -40,7 +42,8 @@ public class UsersRest {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public String newVino(@RequestBody User newUser, HttpServletResponse response) {
         response.setHeader("Content-type", "application/json");
-
+        PasswordEncoder passEncoder = new BCryptPasswordEncoder();
+        newUser.setPassword(passEncoder.encode(newUser.getEmail()));
         if(repository.existsUserByName(newUser.getName())){
             throw new UserException("Ya existe un usuario con el nombre especificado");
         }
