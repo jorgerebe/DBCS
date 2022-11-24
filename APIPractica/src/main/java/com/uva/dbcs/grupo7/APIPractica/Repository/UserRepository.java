@@ -10,6 +10,7 @@ import com.uva.dbcs.grupo7.APIPractica.Model.User;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
     Optional<User> findById(Integer id);
+    Optional<User> findByEmail(String email);
 
     boolean existsUserByName(String name);
     boolean existsUserByEmail(String email);
