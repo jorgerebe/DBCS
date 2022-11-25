@@ -1,13 +1,23 @@
 <div class="contenedor w-100 p-4 d-flex justify-content-center pb-4">
-  <form style="width: 22rem">
+  <form style="width: 22rem" [formGroup]="loginForm" (ngSubmit)="login()">
     <div class="form-outline mb-4">
       <label class="form-label" for="form2Example1">Email address</label>
-      <input type="email" id="form2Example1" class="form-control" />
+      <input
+        type="email"
+        id="form2Example1"
+        formControlName="email"
+        class="form-control"
+      />
     </div>
 
     <div class="form-outline mb-4">
       <label class="form-label" for="form2Example2">Password</label>
-      <input type="password" id="form2Example2" class="form-control" />
+      <input
+        type="password"
+        formControlName="password"
+        id="form2Example2"
+        class="form-control"
+      />
     </div>
 
     <div class="row mb-4">
@@ -31,6 +41,6 @@
       </div> -->
     </div>
 
-    <button type="button" class="btn submitbtn btn-primary mb-4">Login</button>
+    <button type="submit" class="btn submitbtn btn-primary mb-4">Login</button>
   </form>
 </div>
