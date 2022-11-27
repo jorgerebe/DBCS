@@ -4,6 +4,7 @@ using JWT.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using System.IO;
+using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using BC = BCrypt.Net.BCrypt;
 
@@ -21,7 +22,7 @@ app.MapPost("/login", login);
 app.Run();
 
 
-string login([FromBody] User user)
+HttpResponseMessage login([FromBody] User user)
 {
     QueryString queryString = QueryString.Create("email", user.email);
 
@@ -34,7 +35,12 @@ string login([FromBody] User user)
     }
     else
     {
-        return "Fail";
+        HttpResponseMessage bad = new HttpResponseMessage();
+
+        bad.Content = new StringContent("Failed Login");
+        bad.StatusCode = (System.Net.HttpStatusCode)StatusCodes.Status408RequestTimeout;
+
+        return bad;
     }
 
     string hashedPassword = fullUser.GetValue("password").ToString();
@@ -44,7 +50,13 @@ string login([FromBody] User user)
 
     if (!verify)
     {
-        return "False";
+        HttpResponseMessage bad = new HttpResponseMessage();
+
+        bad.Content = new StringContent("Wrong Login");
+        bad.StatusCode = (System.Net.HttpStatusCode)StatusCodes.Status403Forbidden;
+
+        return bad;
+
     }
 
     string privateKey = File.ReadAllText("./Keys/private.key");
@@ -60,9 +72,15 @@ string login([FromBody] User user)
                           .AddClaim("name", fullUser.GetValue("name"))
                           .AddClaim("email", fullUser.GetValue("email"))
                           .AddClaim("role", fullUser.GetValue("role"))
+                          .IssuedAt(DateTime.UtcNow)
+                          .ExpirationTime(DateTimeOffset.UtcNow.AddHours(1).ToUnixTimeMilliseconds())
                           .Encode();
 
-    return token.ToString();
+    HttpResponseMessage responseSend = new HttpResponseMessage();
+
+    responseSend.Headers.Add("access_token", "Bearer " + token.ToString());
+
+    return responseSend;
 
 
 }
