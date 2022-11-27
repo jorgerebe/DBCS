@@ -14,15 +14,14 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class LoginService {
-  urlApi: string = 'http://localhost:8081/login';
-  headers = new HttpHeaders().set('Content-Type', 'application/json');
+  urlApi: string = 'http://localhost:5121/login ';
   currentUser = {};
   constructor(private http: HttpClient, public router: Router) {}
 
   signIn(email: string, pass: string) {
-    const params = new HttpParams().append('email', email).append('pass', pass);
+    const params = new HttpParams().append('email', email).append('password', pass);
     return this.http
-      .post<any>(this.urlApi, null, { params: params })
+      .post<any>(this.urlApi, { params: params })
       .subscribe((res: any) => {
         localStorage.setItem('access_token', res);
         this.router.navigate(['users']);

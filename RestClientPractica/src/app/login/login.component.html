@@ -1,5 +1,5 @@
 <div class="contenedor w-100 p-4 d-flex justify-content-center pb-4">
-  <form style="width: 22rem" [formGroup]="loginForm" (ngSubmit)="login()">
+  <form method="POST" style="width: 22rem" [formGroup]="loginForm" (ngSubmit)="login()">
     <div class="form-outline mb-4">
       <label class="form-label" for="form2Example1">Email address</label>
       <input

@@ -8,8 +8,25 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using BC = BCrypt.Net.BCrypt;
 
+var MyAllowSpecificOrigins = "_MyAllowSubdomainPolicy";
+
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
+app.UseCors(MyAllowSpecificOrigins);
+
 
 HttpClient client = new HttpClient
 {
