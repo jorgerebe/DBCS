@@ -50,7 +50,7 @@ public class SecurityConfig{
     @Order(2)
     SecurityFilterChain filterChainApi(HttpSecurity http, AuthenticationManager authManager){
             try {
-                return http
+                return http.cors().and()
                     .csrf().disable()
                     .authorizeRequests()
                     .anyRequest().authenticated()

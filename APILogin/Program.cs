@@ -3,8 +3,6 @@ using JWT.Algorithms;
 using JWT.Builder;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
-using System.IO;
-using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using BC = BCrypt.Net.BCrypt;
 
@@ -43,7 +41,7 @@ HttpResponseMessage login([FromBody] User user)
 {
     QueryString queryString = QueryString.Create("email", user.email);
 
-    JObject fullUser = null;
+    JObject? fullUser = null;
 
     HttpResponseMessage response = client.GetAsync(queryString.Value).Result;
     if (response.IsSuccessStatusCode)
@@ -87,7 +85,7 @@ HttpResponseMessage login([FromBody] User user)
     var token = JwtBuilder.Create()
                           .WithAlgorithm(new RS256Algorithm(publicKeySign, privateKeySign))
                           .AddClaim("name", fullUser.GetValue("name"))
-                          .AddClaim("email", fullUser.GetValue("email"))
+                          .AddClaim("sub", fullUser.GetValue("email"))
                           .AddClaim("role", fullUser.GetValue("role"))
                           .IssuedAt(DateTime.UtcNow)
                           .ExpirationTime(DateTimeOffset.UtcNow.AddHours(1).ToUnixTimeMilliseconds())
