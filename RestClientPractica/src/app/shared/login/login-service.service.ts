@@ -19,12 +19,17 @@ export class LoginService {
   constructor(private http: HttpClient, public router: Router) {}
 
   signIn(email: string, pass: string) {
-    const params = new HttpParams().append('email', email).append('password', pass);
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    const body = { email: email, password: pass };
+    console.log(JSON.stringify(body));
     return this.http
-      .post<any>(this.urlApi, { params: params })
-      .subscribe((res: any) => {
-        localStorage.setItem('access_token', res);
-        this.router.navigate(['users']);
+      .post(this.urlApi, JSON.stringify(body), {
+        headers: headers,
+        observe: 'response',
+      })
+      .subscribe((response) => {
+        console.log(response.status);
+        console.log(response.headers.get('access_token'));
       });
   }
   getToken() {
