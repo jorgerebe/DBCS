@@ -2,10 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { User } from './app.model';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ClienteApiRestService {
-  private static readonly BASE_URI = 'http://localhost:8080/users/';
+  private static readonly BASE_URI = 'http://localhost:8080/users';
+  private headAllow = new HttpHeaders().set(
+    'access-control-allow-origin',
+    'http://localhost:8080/users'
+  );
   constructor(private http: HttpClient) {} // inyectamos el servicio HttpClient
   // Ejemplo de llamada retornando el cuerpo de la respuesta
 
@@ -27,7 +32,10 @@ export class ClienteApiRestService {
 
     console.log(url);
 
-    return this.http.get<User[]>(url, { observe: 'response' });
+    return this.http.get<User[]>(url, {
+      observe: 'response',
+      headers: this.headAllow,
+    });
   }
 
   borrarUser(id: String): Observable<HttpResponse<any>> {
@@ -54,7 +62,10 @@ export class ClienteApiRestService {
 
   getUser(id: String): Observable<HttpResponse<User>> {
     let url = ClienteApiRestService.BASE_URI + id;
-    return this.http.get<User>(url, { observe: 'response' });
+    return this.http.get<User>(url, {
+      observe: 'response',
+      headers: this.headAllow,
+    });
   }
 
   setUserDisabled(ids: String[]): Observable<HttpResponse<any>> {
