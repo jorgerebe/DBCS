@@ -1,4 +1,4 @@
-﻿namespace APILogin.User
+﻿namespace APILogin.Models
 {
     public class User
     {
