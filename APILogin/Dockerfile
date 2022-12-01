@@ -2,6 +2,8 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
+RUN mkdir ./Keys
+RUN mkdir -p /app/PEPEE
 EXPOSE 80
 EXPOSE 443
 
@@ -9,6 +11,7 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
 COPY ["APILogin.csproj", "."]
 RUN dotnet restore "./APILogin.csproj"
+
 COPY . .
 WORKDIR "/src/."
 RUN dotnet build "APILogin.csproj" -c Release -o /app/build
