@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class LoginService {
-  urlApi: string = 'http://localhost:5135/login';
+  urlApi: string = 'http://localhost:5121/login';
   currentUser = {};
   constructor(private http: HttpClient, public router: Router) {}
 

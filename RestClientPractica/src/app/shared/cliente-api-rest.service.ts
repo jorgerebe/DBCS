@@ -2,103 +2,78 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { User } from './app.model';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
+
 export class ClienteApiRestService {
-  private static readonly BASE_URI = 'http://localhost:8080/users';
-  private headAllow = new HttpHeaders().set(
-    'access-control-allow-origin',
-    'http://localhost:8080/users'
-  );
-  constructor(private http: HttpClient) {} // inyectamos el servicio HttpClient
-  // Ejemplo de llamada retornando el cuerpo de la respuesta
 
-  getAllUsers() {
-    console.log('dentro de getAllUsers');
-    let url = ClienteApiRestService.BASE_URI;
-    return this.http.get<User[]>(url); // Retorna el cuerpo de la respuesta
-  }
+    private static readonly BASE_URI = 'http://localhost:8080/users/';
+    constructor(private http: HttpClient) { } // inyectamos el servicio HttpClient
+    // Ejemplo de llamada retornando el cuerpo de la respuesta
 
-  // Ejemplo de llamada retornando toda la respuesta
-  getAllUsers_ConResponse(
-    enabled: boolean | undefined
-  ): Observable<HttpResponse<User[]>> {
-    let url = ClienteApiRestService.BASE_URI;
-
-    if (enabled !== undefined) {
-      url = url.substring(0, url.length - 1) + '?enabled' + '=' + enabled;
+    getAllUsers() {
+        console.log("dentro de getAllUsers");
+        let url = ClienteApiRestService.BASE_URI;
+        return this.http.get<User[]>(url); // Retorna el cuerpo de la respuesta
     }
 
-    console.log(url);
+    // Ejemplo de llamada retornando toda la respuesta
+    getAllUsers_ConResponse(enabled:boolean|undefined): Observable<HttpResponse<User[]>> {
+        let url = ClienteApiRestService.BASE_URI;
 
-    return this.http.get<User[]>(url, {
-      observe: 'response',
-      headers: this.headAllow,
-    });
-  }
+        if(enabled !== undefined){
+            url = url.substring(0, url.length-1) + "\?enabled" + "=" + enabled;
+        }
 
-  borrarUser(id: String): Observable<HttpResponse<any>> {
-    let url = ClienteApiRestService.BASE_URI + id;
-    return this.http.delete(url, { observe: 'response', responseType: 'text' });
-  }
+        console.log(url);
 
-  anadirUser(user: User): Observable<HttpResponse<any>> {
-    let url = ClienteApiRestService.BASE_URI;
-    return this.http.post(url, user, {
-      observe: 'response',
-      responseType: 'text',
-    });
-  }
+        return this.http.get<User[]>(url, { observe: 'response' });
+    }
 
-  editarUser(id: String, user: User): Observable<HttpResponse<any>> {
-    let url = ClienteApiRestService.BASE_URI + id;
-    console.log('enviando mensaje api');
-    return this.http.put(url, user, {
-      observe: 'response',
-      responseType: 'text',
-    });
-  }
+    borrarUser(id: String): Observable<HttpResponse<any>> {
+        let url = ClienteApiRestService.BASE_URI + id;
+        return this.http.delete(url, { observe: 'response', responseType: 'text'});
+    }
 
-  getUser(id: String): Observable<HttpResponse<User>> {
-    let url = ClienteApiRestService.BASE_URI + id;
-    return this.http.get<User>(url, {
-      observe: 'response',
-      headers: this.headAllow,
-    });
-  }
+    anadirUser(user: User): Observable<HttpResponse<any>> {
+        let url = ClienteApiRestService.BASE_URI;
+        return this.http.post(url, user, { observe: 'response', responseType: 'text'});
+    }
 
-  setUserDisabled(ids: String[]): Observable<HttpResponse<any>> {
-    let url = ClienteApiRestService.BASE_URI + 'disable?user_id=';
+    editarUser(id: String, user: User): Observable<HttpResponse<any>> {
+        let url = ClienteApiRestService.BASE_URI + id;
+        console.log("enviando mensaje api");
+        return this.http.put(url, user, { observe: 'response', responseType: 'text'});
+    }
 
-    ids.forEach((id) => {
-      url += id + ',';
-    });
+    getUser(id: String): Observable<HttpResponse<User>> {
+        let url = ClienteApiRestService.BASE_URI + id;
+        return this.http.get<User>(url, { observe: 'response' });
+    }
 
-    url = url.substring(0, url.length - 1);
+    setUserDisabled(ids: String[]): Observable<HttpResponse<any>>{
+        let url = ClienteApiRestService.BASE_URI + "disable?user_id=";
 
-    console.log(url);
-    return this.http.put(
-      url,
-      {},
-      { observe: 'response', responseType: 'text' }
-    );
-  }
+        ids.forEach(id => {
+                    url += id + ",";
+        });
 
-  setUserEnabled(ids: String[]): Observable<HttpResponse<any>> {
-    let url = ClienteApiRestService.BASE_URI + 'enable?user_id=';
+        url = url.substring(0, url.length-1);
 
-    ids.forEach((id) => {
-      url += id + ',';
-    });
+        console.log(url);
+        return this.http.put(url, {},  {observe: 'response', responseType: 'text'});
+    }
 
-    url = url.substring(0, url.length - 1);
+    setUserEnabled(ids: String[]): Observable<HttpResponse<any>>{
+        let url = ClienteApiRestService.BASE_URI + "enable?user_id=";
 
-    console.log(url);
-    return this.http.put(
-      url,
-      {},
-      { observe: 'response', responseType: 'text' }
-    );
-  }
+        ids.forEach(id => {
+                    url += id + ",";
+        });
+
+        url = url.substring(0, url.length-1);
+
+        console.log(url);
+        return this.http.put(url, {},  {observe: 'response', responseType: 'text'});
+    }
 }
