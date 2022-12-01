@@ -1,11 +1,6 @@
 package com.uva.dbcs.grupo7.APIPractica.Security;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
@@ -13,18 +8,13 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
 import java.util.Collections;
 
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import java.io.FileInputStream;
 import java.io.IOException;
 
 public class TokenUtil {
-    
-    private final static String SECRET = "mySecretKey";
-
 
     public static UsernamePasswordAuthenticationToken getAuth(String tokenJWT) {
         //TODO controlar excepciones

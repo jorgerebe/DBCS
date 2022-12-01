@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+
+  Login-API:
+    image: login-api-image
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    restart: unless-stopped
+    ports:
+      - "5121:80"
