@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { User } from '../app.model';
+import { header, User } from '../app.model';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {
@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class LoginService {
-  urlApi: string = 'http://localhost:5121/login ';
+  urlApi: string = 'http://localhost:5135/login';
   currentUser = {};
   constructor(private http: HttpClient, public router: Router) {}
 
@@ -29,7 +29,14 @@ export class LoginService {
       })
       .subscribe((response) => {
         console.log(response.status);
-        console.log(response.headers.get('access_token'));
+        console.log(response.body);
+
+        let header_token : header;
+        header_token = (response.body as header);
+        console.log('Token : ' + header_token.access_token);
+
+        localStorage.setItem('access_token', header_token.access_token);
+        this.router.navigate(["/users"]);
       });
   }
   getToken() {
