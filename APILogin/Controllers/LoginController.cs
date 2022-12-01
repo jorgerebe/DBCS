@@ -14,19 +14,21 @@ namespace APILogin.Controllers
     [Route("[controller]")]
     public class LoginController : ControllerBase
     {
+        [HttpGet]
+        public string pepe()
+        {
+            return "pepe";
+        }
+
         [HttpPost]
         public IActionResult login(User user)
         {
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:8080/users");
-
+            client.BaseAddress = new Uri("http://host.docker.internal:8080/users");
 
             QueryString queryString = QueryString.Create("email", user.email);
 
             JObject? fullUser = null;
-
-            Console.WriteLine(client.BaseAddress.ToString());
-            Console.WriteLine(queryString.Value);
 
             HttpResponseMessage response = client.GetAsync(queryString.Value).Result;
             if (response.IsSuccessStatusCode)
@@ -68,8 +70,7 @@ namespace APILogin.Controllers
             HttpResponseMessage responseSendMessage = new HttpResponseMessage();
             responseSendMessage.Headers.Add("access_token", "Bearer " + token.ToString());
 
-            return StatusCode(StatusCodes.Status200OK, responseSendMessage);
-
+            return Ok("Bearer " + token.ToString());
 
         }
     }
