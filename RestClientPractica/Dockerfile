@@ -7,4 +7,5 @@ COPY . /app
 RUN npm run build --prod --omit=dev
 FROM nginx:alpine
 COPY --from=build-step /app/dist/rest-client-practica /usr/share/nginx/html
-COPY --from=build-step /app/nginx-custom.conf /etc/nginx/conf.d/default.confx
+COPY --from=build-step /app/nginx.conf /etc/nginx/conf.d/nginx.conf
+RUN rm /etc/nginx/conf.d/default.conf
