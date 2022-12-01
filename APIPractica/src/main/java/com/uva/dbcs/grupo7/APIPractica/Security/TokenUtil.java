@@ -1,7 +1,5 @@
 package com.uva.dbcs.grupo7.APIPractica.Security;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -13,6 +11,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class TokenUtil {
 
@@ -36,7 +35,8 @@ public class TokenUtil {
 
             try
             {
-                byte[] bytes = Files.readAllBytes(Paths.get("./APIPractica/src/main/java/com/uva/dbcs/grupo7/APIPractica/Security/private.key"));
+                InputStream iptStr= TokenUtil.class.getResourceAsStream("./private.key");
+                byte[] bytes = iptStr.readAllBytes();
                 fileContent = new String (bytes);
             } 
             catch (IOException e) 

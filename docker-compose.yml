@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 volumes:
   kong_data: {}
@@ -8,17 +8,16 @@ networks: #Red interna para comunicar los servicios (“Services on the same net
   kong-net:
 
 services:
-
   front:
     image: my-angular-app
     build:
-        context: ./RestClientPractica
-        dockerfile: ./Dockerfile
+      context: ./RestClientPractica
+      dockerfile: ./Dockerfile
     restart: unless-stopped
     ports:
       - "4200:80"
     networks:
-        - kong-net
+      - kong-net
 
   Login-API:
     image: login-api-image
@@ -64,4 +63,4 @@ services:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: Usuarios
-      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_HOST: "%"
