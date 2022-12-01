@@ -15,3 +15,7 @@ export enum Role{
     HOST = 'HOST',
     GUEST = 'GUEST'
 }
+
+export interface header{
+    access_token : string
+}

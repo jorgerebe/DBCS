@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using System.Security.Cryptography;
+using System.Text.Json.Nodes;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using BC = BCrypt.Net.BCrypt;
 
@@ -24,7 +25,7 @@ namespace APILogin.Controllers
         public IActionResult login(User user)
         {
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://host.docker.internal:8080/users");
+            client.BaseAddress = new Uri("http://localhost:8080/users");
 
             QueryString queryString = QueryString.Create("email", user.email);
 
@@ -67,10 +68,10 @@ namespace APILogin.Controllers
                                   .ExpirationTime(DateTimeOffset.UtcNow.AddHours(1).ToUnixTimeMilliseconds())
                                   .Encode();
 
-            HttpResponseMessage responseSendMessage = new HttpResponseMessage();
-            responseSendMessage.Headers.Add("access_token", "Bearer " + token.ToString());
+            JsonObject respuesta = new JsonObject();
+            respuesta.Add("access_token", token.ToString());
 
-            return Ok("Bearer " + token.ToString());
+            return Ok(respuesta.ToString());
 
         }
     }
