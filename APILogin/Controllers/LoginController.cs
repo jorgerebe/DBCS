@@ -15,17 +15,12 @@ namespace APILogin.Controllers
     [Route("[controller]")]
     public class LoginController : ControllerBase
     {
-        [HttpGet]
-        public string pepe()
-        {
-            return "pepe";
-        }
 
         [HttpPost]
         public IActionResult login(User user)
         {
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://host.docker.internal:8080/users");
+            client.BaseAddress = new Uri("http://localhost:8080/users");
 
             QueryString queryString = QueryString.Create("email", user.email);
 
