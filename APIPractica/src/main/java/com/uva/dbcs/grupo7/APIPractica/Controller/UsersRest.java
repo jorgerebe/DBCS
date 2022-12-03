@@ -105,7 +105,8 @@ public class UsersRest {
         existente.setFirstName(user.getFirstName());
         existente.setLastName(user.getLastName());
         existente.setEmail(user.getEmail());
-        existente.setPassword(user.getPassword());
+        PasswordEncoder passEncoder = new BCryptPasswordEncoder();
+        existente.setPassword(passEncoder.encode(user.getPassword()));
 
         try {
             repository.save(existente);

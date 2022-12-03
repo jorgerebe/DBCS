@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class LoginService {
-  urlApi: string = 'http://localhost:5135/login';
+  urlApi: string = 'http://localhost:5121/login';
   currentUser = {};
   constructor(private http: HttpClient, public router: Router) {}
 
@@ -51,18 +51,5 @@ export class LoginService {
     if (removeToken == null) {
       this.router.navigate(['login']);
     }
-  }
-
-  // Error
-  handleError(error: HttpErrorResponse) {
-    let msg = '';
-    if (error.error instanceof ErrorEvent) {
-      // client-side error
-      msg = error.error.message;
-    } else {
-      // server-side error
-      msg = `Error Code: ${error.status}\nMessage: ${error.message}`;
-    }
-    return throwError(() => error);
   }
 }
