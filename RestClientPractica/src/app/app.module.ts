@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { LoginInterceptor } from './shared/login/login.interceptor';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,8 +16,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { ToastsContainer } from './shared/toasts-container.component';
 import { ToastService } from './shared/toast-service';
-
-
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -24,18 +24,27 @@ import { ToastService } from './shared/toast-service';
     UserListarComponent,
     EditarUserComponent,
     CrearUserComponent,
-    ToastsContainer
+    ToastsContainer,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    NgbModule
+    ReactiveFormsModule,
+    NgbModule,
   ],
   providers: [
     ClienteApiRestService,
-    ToastService],
-  bootstrap: [AppComponent]
+    ToastService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoginInterceptor,
+      multi: true,
+    },
+  ],
+
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

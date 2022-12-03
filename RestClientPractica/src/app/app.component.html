@@ -11,6 +11,11 @@
         <a class="nav-item nav-link active" [routerLink]="['/users']" [queryParams]="{enabled:'false'}">Ver desactivados</a>
       </div>
     </div>
+    <form class="form-inline">
+      <button type="button" class="btn btn-primary btn-block" *ngIf="isLogged()" (click)="logOut()">
+          <span class=""></span> Log out <i class="bi bi-door-closed"></i>
+      </button>
+    </form>
   </nav>
 </header>
 <div class="container">
