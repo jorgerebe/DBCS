@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200")
 public class UsersRest {
 
     private final UserRepository repository;
@@ -43,7 +43,7 @@ public class UsersRest {
     public String newVino(@RequestBody User newUser, HttpServletResponse response) {
         response.setHeader("Content-type", "application/json");
         PasswordEncoder passEncoder = new BCryptPasswordEncoder();
-        newUser.setPassword(passEncoder.encode(newUser.getEmail()));
+        newUser.setPassword(passEncoder.encode(newUser.getPassword()));
         if(repository.existsUserByName(newUser.getName())){
             throw new UserException("Ya existe un usuario con el nombre especificado");
         }
@@ -105,7 +105,8 @@ public class UsersRest {
         existente.setFirstName(user.getFirstName());
         existente.setLastName(user.getLastName());
         existente.setEmail(user.getEmail());
-        existente.setPassword(user.getPassword());
+        PasswordEncoder passEncoder = new BCryptPasswordEncoder();
+        existente.setPassword(passEncoder.encode(user.getPassword()));
 
         try {
             repository.save(existente);
