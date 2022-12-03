@@ -5,6 +5,7 @@ import java.security.PrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
 import java.util.Collections;
+import java.util.Date;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import io.jsonwebtoken.Claims;
@@ -20,7 +21,7 @@ public class TokenUtil {
          try { 
 
             Claims claims = Jwts.parser().setSigningKey(privateKey()).parseClaimsJws(tokenJWT).getBody();
-
+            if(claims.getExpiration().before(new Date())){return null;};
         return new UsernamePasswordAuthenticationToken(claims.getSubject(), null, Collections.emptyList());    
          } catch (JwtException e) {
             return null;
@@ -43,7 +44,7 @@ public class TokenUtil {
             {
                 e.printStackTrace();
             }
-            System.out.println(fileContent);
+
             byte[] bytearray = Base64.getDecoder().decode(fileContent);
             PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(bytearray);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
