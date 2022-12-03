@@ -16,11 +16,24 @@ namespace APILogin.Controllers
     public class LoginController : ControllerBase
     {
 
+        const string URI_DOCKER = "http://host.docker.internal:8080/users";
+        const string URI_STANDAR = "http://localhost:8080/users";
+
         [HttpPost]
         public IActionResult login(User user)
         {
             HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri("http://localhost:8080/users");
+
+            if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
+            {
+                Console.WriteLine("Ejecutando en docker");
+                client.BaseAddress = new Uri(URI_DOCKER);
+            }
+            else
+            {
+                Console.WriteLine("Ejecutando en otra cosa");
+                client.BaseAddress = new Uri(URI_STANDAR);
+            }
 
             QueryString queryString = QueryString.Create("email", user.email);
 
@@ -33,7 +46,7 @@ namespace APILogin.Controllers
             }
             else
             {
-                return StatusCode(StatusCodes.Status408RequestTimeout);
+                return StatusCode(StatusCodes.Status403Forbidden);
             }
 
             string hashedPassword = fullUser.GetValue("password").ToString();
@@ -60,7 +73,7 @@ namespace APILogin.Controllers
                                   .AddClaim("sub", fullUser.GetValue("email"))
                                   .AddClaim("role", fullUser.GetValue("role"))
                                   .IssuedAt(DateTime.UtcNow)
-                                  .ExpirationTime(DateTimeOffset.UtcNow.AddHours(1).ToUnixTimeMilliseconds())
+                                  .ExpirationTime(DateTimeOffset.UtcNow.AddHours(1).ToUnixTimeSeconds())
                                   .Encode();
 
             JsonObject respuesta = new JsonObject();

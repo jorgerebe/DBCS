@@ -14,6 +14,8 @@
 	<name>APIPractica</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
+		<project.root>./src/main/java/com/uva/dbcs/grupo7/APIPractica</project.root>
+		<target.root>./com/uva/dbcs/grupo7/APIPractica</target.root>
 		<java.version>18</java.version>
 	</properties>
 	<dependencies>
@@ -64,6 +66,22 @@
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<targetPath>${target.root}/Security</targetPath>
+				<directory>${project.root}/Security</directory>
+				<includes>
+					<include>private.key</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>./src/main/resources</directory>
+				<includes>
+					<include>application.properties</include>
+				</includes>
+			</resource>
+
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
