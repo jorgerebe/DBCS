@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { header, User } from '../app.model';
-import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
 import {
   HttpClient,
   HttpHeaders,
@@ -14,7 +12,7 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class LoginService {
-  urlApi: string = 'http://localhost:5121/login';
+  urlApi: string = 'http://localhost:8000/api/login';
   currentUser = {};
   constructor(private http: HttpClient, public router: Router) {}
 
