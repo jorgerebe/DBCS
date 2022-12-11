@@ -72,6 +72,7 @@ namespace APILogin.Controllers
                                   .AddClaim("name", fullUser.GetValue("name"))
                                   .AddClaim("sub", fullUser.GetValue("email"))
                                   .AddClaim("role", fullUser.GetValue("role"))
+                                  .AddClaim("kid", "S12q4zYfzyWBwOAJymR7q4BANULcJEAZ")
                                   .IssuedAt(DateTime.UtcNow)
                                   .ExpirationTime(DateTimeOffset.UtcNow.AddHours(1).ToUnixTimeSeconds())
                                   .Encode();
