@@ -170,3 +170,36 @@ services:
       MYSQL_PASSWORD: password
       MYSQL_DATABASE: Usuarios
       MYSQL_ROOT_HOST: "%"
+
+  Reservas-API:
+    image: users-api-image
+    build:
+      context: ./APIReservas
+      dockerfile: ./Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    networks:
+      - kong-net
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://Reservas-database:3307/Reservas?createDatabaseIfNotExist=true
+    depends_on:
+      - Reservas-database
+
+  Reservas-database:
+    image: mysql
+    hostname: Reservas-database
+    cap_add:
+      - SYS_NICE
+    restart: unless-stopped
+    ports:
+      - "3308:3307"
+    networks:
+      - kong-net
+    volumes:
+      - users_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: Reservas
+      MYSQL_ROOT_HOST: "%"
