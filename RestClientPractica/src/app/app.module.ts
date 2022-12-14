@@ -17,6 +17,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastsContainer } from './shared/toasts-container.component';
 import { ToastService } from './shared/toast-service';
 import { LoginComponent } from './login/login.component';
+import { ReservaListarComponent } from './reserva-listar/reserva-listar.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { LoginComponent } from './login/login.component';
     CrearUserComponent,
     ToastsContainer,
     LoginComponent,
+    ReservaListarComponent,
   ],
   imports: [
     BrowserModule,
