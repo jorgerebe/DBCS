@@ -14,35 +14,46 @@
         <thead>
           <tr>
             <th>#</th>
-            <th>Nombre</th>
-            <th>Primer apellido</th>
-            <th>Segundo apellido</th>
-            <th>Correo electrónico</th>
-            <th>Rol</th>
-            <th>Activado</th>
+            <th>Nombre huésped</th>
+            <th>ID huésped</th>
+            <th>Precio</th>
+            <th>Habitaciones</th>
+            <th>Huéspedes</th>
+            <th>Estado</th>
+            <th>Fecha entrada</th>
+            <th>Fecha salida</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let user of Users">
+          <tr *ngFor="let reserva of Reservas">
             <td>
-              <i>{{user.id}}</i>
+              <i>{{reserva.id}}</i>
             </td>
             <td>
-              <i>{{user.name}}</i>
+              <i>{{reserva.guestName}}</i>
             </td>
             <td>
-              <i>{{user.firstName}}</i>
+              <i>{{reserva.guestID}}</i>
             </td>
             <td>
-              <i>{{user.lastName}}</i>
+              <i>{{reserva.price}}</i>
             </td>
             <td>
-              <i>{{user.email}}</i>
+              <i>{{reserva.units}}</i>
             </td>
 
             <td>
-              <i>{{user.role}}</i>
+              <i>{{reserva.numGuest}}</i>
+            </td>
+            <td>
+              <i>{{reserva.status}}</i>
+            </td>
+            <td>
+              <i>{{reserva.dateIn}}</i>
+            </td>
+            <td>
+              <i>{{reserva.dateOut}}</i>
             </td>
             <td class="actions">
               <a
