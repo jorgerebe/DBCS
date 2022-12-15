@@ -1,8 +1,8 @@
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
-<h3 class="titulo mt-4 offset-sm-3">Creación de usuario</h3>
+<h3 class="titulo mt-4 offset-sm-3">Creación de reserva</h3>
 <div class="container">
     <div class="offset-sm-3 col-sm-9">
-       <form (ngSubmit)="userForm.form.valid && onSubmit()" #userForm="ngForm">
+       <form (ngSubmit)="reservaForm.form.valid && onSubmit()" #reservaForm="ngForm">
        <div class="form-group row">
         <div class="offset-sm-0 col-sm-3">
             <label class="control-label" for="name">Apodo</label>
@@ -64,29 +64,18 @@
  
        <div class="form-group row">
             <div class="col-sm-3">
-               <label class="control-label" for="role">Rol</label>
-               <select class="form-select form-select-sm" [(ngModel)]="user.role" name="role" #role=ngModel>
-                  <option *ngFor="let role of roles | keyvalue" [ngValue]="role.value">{{role.value}}</option>
+               <label class="control-label" for="status">Estado</label>
+               <select class="form-select form-select-sm" [(ngModel)]="reserva.status" name="status" #role=ngModel>
+                  <option *ngFor="let st of status | keyvalue" [ngValue]="st.value">{{st.value}}</option>
                </select>
             </div>
           
-            <div class="form-check col-sm-3">
-               <label class="control-label" for="role">Estado</label>
-               <div class="row form-switch align-items-center h-50" >
-                  <div>
-                     <label *ngIf="user.enabled" class="form-check-label" for="enabled">Activado</label>
-                     <label *ngIf="!user.enabled" class="form-check-label" for="enabled">Desactivado</label>
-   
-                     <input type="checkbox" checked class=" form-check-input" required name="enabled"
-                     [ngModel]="user.enabled" disabled>
-                  </div>
-               </div>
-            </div>
+            
        </div> 
 
        <div class="form-group row">
           <div class="offset-sm-4 col-sm-1 d-grid gap-2">
-             <button type="submit" class="btn btn-primary btn-block" [disabled]="!userForm.form.valid">
+             <button type="submit" class="btn btn-primary btn-block" [disabled]="!reservaForm.form.valid">
              Aceptar </button>
           </div>
           <div class="col-sm-1">

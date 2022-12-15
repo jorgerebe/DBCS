@@ -14,7 +14,7 @@ export interface User {
 export interface Reserva {
   id: Number;
   guestName: String;
-  guestID: String;
+  guestID: Number;
   price: number;
   units: Number;
   numGuest: Number;
