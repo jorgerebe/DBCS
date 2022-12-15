@@ -18,6 +18,7 @@ import { ToastsContainer } from './shared/toasts-container.component';
 import { ToastService } from './shared/toast-service';
 import { LoginComponent } from './login/login.component';
 import { ReservaListarComponent } from './reserva-listar/reserva-listar.component';
+import { ReservaCrearComponent } from './reserva-crear/reserva-crear.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { ReservaListarComponent } from './reserva-listar/reserva-listar.componen
     ToastsContainer,
     LoginComponent,
     ReservaListarComponent,
+    ReservaCrearComponent,
   ],
   imports: [
     BrowserModule,
