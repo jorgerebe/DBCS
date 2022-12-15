@@ -5,6 +5,7 @@ import { UserListarComponent } from './user-listar/user-listar.component';
 import { EditarUserComponent } from './user-editar/user-editar.component';
 import { CrearUserComponent } from './user-crear/user-crear.component';
 import { LoginGuard } from './shared/login/login.guard';
+import { ReservaListarComponent } from './reserva-listar/reserva-listar.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, title: 'Login' },
@@ -25,6 +26,11 @@ const routes: Routes = [
     component: CrearUserComponent,
     title: 'Añadir usuario',
     canActivate: [LoginGuard],
+  },
+  {
+    path: 'reservas',
+    component: ReservaListarComponent,
+    title: 'Gestor Reservas',
   },
   {
     path: '**',

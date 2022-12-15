@@ -3,12 +3,6 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="row">
-        <div class="button-box col mb-3">
-          <a class="btn btn-primary me-3" (click)="desactivarTodos()"
-            >Desactivar todos</a
-          >
-          <a class="btn btn-primary" (click)="activarTodos()">Activar todos</a>
-        </div>
       </div>
       <table class="table table-striped text-center">
         <thead>
@@ -58,7 +52,7 @@
             <td class="actions">
               <a
                 class="btn btn-info"
-                [routerLink]="['/users', user.id, 'editar']"
+                [routerLink]="['/reservas', reserva.id, 'editar']"
               >
                 <i class="fas fa-pencil"></i
               ></a>

@@ -31,14 +31,25 @@ export class LoginService {
 
         let header_token : header;
         header_token = (response.body as header);
-        console.log('Token : ' + header_token.access_token);
 
         localStorage.setItem('access_token', header_token.access_token);
+
+        let strJwt = (response.body as string)
+        let jwtData = strJwt.split('.')[1]
+        let decodedJwtJsonData = window.atob(jwtData)
+        let decodedJwtData = JSON.parse(decodedJwtJsonData)
         this.router.navigate(["/users"]);
       });
   }
   getToken() {
     return localStorage.getItem('access_token');
+  }
+  getRole() {
+    let jwtData = (this.getToken()?.split('.')[1] as string);
+    let decodedJwtJsonData = window.atob(jwtData);
+    let decodedJwtData = JSON.parse(decodedJwtJsonData);
+    return decodedJwtData['role'];
+
   }
   get isLoggedIn(): boolean {
     let authToken = localStorage.getItem('access_token');
