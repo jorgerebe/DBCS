@@ -1,27 +1,4 @@
-<header>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" [routerLink]="['/reservas/']">Gestor de reservas</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNavAltMarkup"
-      aria-controls="navbarNavAltMarkup"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-item nav-link active" [routerLink]="['/reservas/nuevo']"
-          >Crear Reserva</a
-        >
-      </div>
-    </div>
-    <form class="form-inline"></form>
-  </nav>
-</header>
+
 
 <h3 class="titulo mt-2 mb-4">Gestión de usuarios</h3>
 <div class="container">
@@ -40,40 +17,40 @@
             <th>Estado</th>
             <th>Fecha entrada</th>
             <th>Fecha salida</th>
-            <th>Acciones</th>
+            <th *ngIf="getRole() == 'HOST'">Acciones</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let reserva of Reservas">
             <td>
-              <i>{{reserva.id}}</i>
+              <i>{{ reserva.id }}</i>
             </td>
             <td>
-              <i>{{reserva.guestName}}</i>
+              <i>{{ reserva.guestName }}</i>
             </td>
             <td>
-              <i>{{reserva.guestID}}</i>
+              <i>{{ reserva.guestID }}</i>
             </td>
             <td>
-              <i>{{reserva.price}}</i>
+              <i>{{ reserva.price }}</i>
             </td>
             <td>
-              <i>{{reserva.units}}</i>
+              <i>{{ reserva.units }}</i>
             </td>
 
             <td>
-              <i>{{reserva.numGuest}}</i>
+              <i>{{ reserva.numGuest }}</i>
             </td>
             <td>
-              <i>{{reserva.status}}</i>
+              <i>{{ reserva.status }}</i>
             </td>
             <td>
-              <i>{{reserva.dateIn}}</i>
+              <i>{{ reserva.dateIn }}</i>
             </td>
             <td>
-              <i>{{reserva.dateOut}}</i>
+              <i>{{ reserva.dateOut }}</i>
             </td>
-            <td class="actions">
+            <td *ngIf="getRole() == 'HOST'" class="actions">
               <a
                 class="btn btn-info"
                 [routerLink]="['/reservas', reserva.id, 'editar']"

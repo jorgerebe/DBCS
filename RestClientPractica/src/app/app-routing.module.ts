@@ -7,6 +7,9 @@ import { CrearUserComponent } from './user-crear/user-crear.component';
 import { LoginGuard } from './shared/login/login.guard';
 import { ReservaListarComponent } from './reserva-listar/reserva-listar.component';
 import { ReservaCrearComponent } from './reserva-crear/reserva-crear.component';
+import { ReservaEditarComponent } from './reserva-editar/reserva-editar.component';
+import { GuestRoleGuard } from './shared/login/guest-role.guard';
+import { HostRoleGuard } from './shared/login/host-role.guard';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent, title: 'Login' },
@@ -32,12 +35,20 @@ const routes: Routes = [
     path: 'reservas',
     component: ReservaListarComponent,
     title: 'Gestor Reservas',
+    canActivate: [LoginGuard],
   },
   {
     path: 'reservas/nuevo',
     component: ReservaCrearComponent,
     title: 'Añadir Reserva',
-    canActivate: [LoginGuard],
+    canActivate: [LoginGuard, GuestRoleGuard],
+  },
+
+  {
+    path: 'reservas/:id/editar',
+    component: ReservaEditarComponent,
+    title: 'Editar reserva',
+    canActivate: [LoginGuard, HostRoleGuard],
   },
 
   {
