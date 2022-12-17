@@ -34,10 +34,6 @@ export class LoginService {
 
         localStorage.setItem('access_token', header_token.access_token);
 
-        let strJwt = (response.body as string)
-        let jwtData = strJwt.split('.')[1]
-        let decodedJwtJsonData = window.atob(jwtData)
-        let decodedJwtData = JSON.parse(decodedJwtJsonData)
         this.router.navigate(["/users"]);
       });
   }

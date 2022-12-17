@@ -19,6 +19,7 @@ import { ToastService } from './shared/toast-service';
 import { LoginComponent } from './login/login.component';
 import { ReservaListarComponent } from './reserva-listar/reserva-listar.component';
 import { ReservaCrearComponent } from './reserva-crear/reserva-crear.component';
+import { DatePipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { ReservaCrearComponent } from './reserva-crear/reserva-crear.component';
   ],
   providers: [
     ClienteApiRestService,
+    DatePipe,
     ToastService,
     {
       provide: HTTP_INTERCEPTORS,
