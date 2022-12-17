@@ -20,7 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/book")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin("*")
+
 public class ReservasRest {
 
     private final ReservaRepository repository;
@@ -46,6 +47,12 @@ public class ReservasRest {
             repository.save(newReserva);
             return "Nuevo registro creado";
 
+    }
+    @GetMapping
+    public List<Reserva> getReservas() {
+
+        List<Reserva> ReservaList = repository.findAll();
+        return ReservaList;
     }
 
     @GetMapping(value = "/availability")

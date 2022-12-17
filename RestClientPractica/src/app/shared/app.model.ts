@@ -19,8 +19,8 @@ export interface Reserva {
   units: Number;
   numGuest: Number;
   status: Status;
-  dateIn: Date;
-  dateOut: Date;
+  dateIn: Date | string;
+  dateOut: Date | string;
   createdAt: Date;
   updatedAt: Date;
 }

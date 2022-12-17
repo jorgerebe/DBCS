@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { LoginService } from './shared/login/login-service.service';
 import { LoginGuard } from './shared/login/login.guard';
@@ -9,6 +10,7 @@ import { LoginGuard } from './shared/login/login.guard';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  router;
   title = 'Gestor Usuarios';
 
   isLoggedNow!:boolean;
@@ -18,10 +20,11 @@ export class AppComponent {
 
   subscriptionLoggedIn !: Subscription;
 
-  constructor(guard:LoginGuard, loginService:LoginService)
+  constructor(guard:LoginGuard, loginService:LoginService, router:Router)
   {
     this.loginGuard = guard;
     this.loginService = loginService;
+    this.router = router;
   }
 
   isLogged(){
@@ -31,4 +34,5 @@ export class AppComponent {
   logOut(){
     this.loginService.doLogout();
   }
+
 }
