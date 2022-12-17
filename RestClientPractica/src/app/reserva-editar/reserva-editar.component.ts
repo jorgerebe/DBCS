@@ -1,10 +1,6 @@
-import { Component, Injectable, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { Role, Reserva, Status } from '../shared/app.model';
+import { Component, Injectable, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ReservaApiRestService } from '../shared/reserva-api-rest.service';
-import { Subscription } from 'rxjs';
-import { ToastService } from '../shared/toast-service';
 import {
   NgbCalendar,
   NgbDate,
@@ -12,7 +8,11 @@ import {
   NgbDateParserFormatter,
   NgbDateStruct,
 } from '@ng-bootstrap/ng-bootstrap';
-import { LoginService } from '../shared/login/login-service.service';
+import { Subscription } from 'rxjs';
+import { Reserva, Status } from '../shared/app.model';
+
+import { ReservaApiRestService } from '../shared/reserva-api-rest.service';
+import { ToastService } from '../shared/toast-service';
 @Injectable()
 export class CustomAdapter extends NgbDateAdapter<string> {
   readonly DELIMITER = '/';
@@ -57,17 +57,25 @@ export class CustomDateParserFormatter extends NgbDateParserFormatter {
       : '';
   }
 }
-
 @Component({
-  selector: 'app-reserva-crear',
-  templateUrl: './reserva-crear.component.html',
-  styleUrls: ['./reserva-crear.component.css'],
-  providers: [
-    { provide: NgbDateAdapter, useClass: CustomAdapter },
-    { provide: NgbDateParserFormatter, useClass: CustomDateParserFormatter },
-  ],
+  selector: 'app-reserva-editar',
+  templateUrl: './reserva-editar.component.html',
+  styleUrls: ['./reserva-editar.component.css'],
 })
-export class ReservaCrearComponent implements OnInit {
+export class ReservaEditarComponent implements OnInit {
+  reservaVacia = {
+    id: 0,
+    guestName: '',
+    guestID: 0,
+    price: 0.0,
+    units: 0,
+    numGuest: 0,
+    status: Status.CONFIRMED,
+    dateIn: new Date(),
+    dateOut: new Date(),
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
   hoveredDate: NgbDate | null = null;
 
   fromDate: NgbDate | null;
@@ -79,22 +87,9 @@ export class ReservaCrearComponent implements OnInit {
   subscriptionTipo!: Subscription;
   subscriptionMensaje!: Subscription;
 
-  reservaVacia = {
-    id: 0,
-    guestName: '',
-    guestID: 0,
-    price: 1.57,
-    units: 1,
-    numGuest: 1,
-    status: Status.CONFIRMED,
-    dateIn: new Date(),
-    dateOut: new Date(),
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
-
   reserva = this.reservaVacia as Reserva;
   id!: String;
+
   operacion!: String;
   constructor(
     private ruta: ActivatedRoute,
@@ -105,20 +100,19 @@ export class ReservaCrearComponent implements OnInit {
     public formatter: NgbDateParserFormatter,
     private ngbCalendar: NgbCalendar,
     private dateAdapter: NgbDateAdapter<string>,
-    private datePipe: DatePipe,
-    private loginService: LoginService
+    private datePipe: DatePipe
   ) {
     this.fromDate = calendar.getToday();
     this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
-    this.reserva.guestID = loginService.getID() || 0;
-    this.reserva.guestName = loginService.getName();
   }
 
   today() {
     return this.ngbCalendar.getToday()!;
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    console.log('En editar-reserva');
+
     this.subscriptionTipo = this.datos.tipoActual.subscribe((valor) => {
       this.tipoMensaje = valor;
     });
@@ -126,16 +120,32 @@ export class ReservaCrearComponent implements OnInit {
     this.subscriptionMensaje = this.datos.mensajeActual.subscribe((valor) => {
       this.mensaje = valor;
       if (this.mensaje.length != 0) {
+        console.log('suscrito');
         this.showToast(this.mensaje, this.tipoMensaje);
       }
     });
 
-    this.ruta.paramMap.subscribe(
-      (params) => {
-        this.id = params.get('id')!;
-      },
-      (err) => console.log('Error al traer id para editar')
-    );
+    this.operacion =
+      this.ruta.snapshot.url[this.ruta.snapshot.url.length - 1].path;
+    if (this.operacion == 'editar') {
+      console.log('En Editar');
+      this.ruta.paramMap.subscribe(
+        (params) => {
+          this.id = params.get('id')!;
+        },
+        (err) => console.log('Error al leer id para editar: ' + err)
+      );
+
+      this.reservaApiRest.getReserva(this.id).subscribe(
+        (resp) => {
+          this.reserva = resp.body!;
+        },
+        (err) => {
+          console.log('Error al traer la reserva: ' + err.message);
+          throw err;
+        }
+      );
+    }
   }
 
   ngOnDestroy() {
@@ -143,47 +153,29 @@ export class ReservaCrearComponent implements OnInit {
     this.subscriptionTipo.unsubscribe();
   }
 
-  onSubmit(): void {
-    if (this.fromDate != null && this.toDate != null) {
-      var dIn = new Date(
-        this.fromDate?.year,
-        this.fromDate?.month - 1,
-        this.fromDate?.day
-      );
-      var dOut = new Date(
-        this.toDate?.year,
-        this.toDate?.month - 1,
-        this.toDate?.day
-      );
-
-      console.log(this.datePipe.transform(dOut, 'dd/MM/yyyy'));
-      var test = this.datePipe.transform(dIn, 'dd/MM/yyyy') || '';
-      var test2 = this.datePipe.transform(dOut, 'dd/MM/yyyy') || '';
-
-      this.reserva.dateIn = test;
-      this.reserva.dateOut = test2;
-      console.log(this.reserva.dateIn);
-      this.reservaApiRest.anadirReserva(this.reserva).subscribe(
-        (resp) => {
-          if (resp.status < 400) {
-            this.datos.cambiarTipo('success');
-            this.datos.cambiarMensaje(resp.body);
-          } else {
-            this.datos.cambiarMensaje('Error al añadir reserva');
+  onSubmit() {
+    console.log('Enviado formulario');
+    if (this.id) {
+      this.reservaApiRest
+        .editarReserva(String(this.reserva.id), this.reserva)
+        .subscribe(
+          (resp) => {
+            if (resp.status < 400) {
+              this.datos.cambiarTipo('success');
+              this.datos.cambiarMensaje(resp.body);
+              console.log('Reserva editada');
+            } else {
+              this.datos.cambiarMensaje('Error al modificar la reserva');
+            }
+            this.router.navigate(['/reservas']);
+          },
+          (err) => {
+            let error = JSON.parse(err.error);
+            this.datos.cambiarTipo('danger');
+            this.datos.cambiarMensaje(error.message);
+            console.log('Error al editar: ' + error.message);
           }
-          this.router.navigate(['/reservas']);
-        },
-        (err) => {
-          let error = JSON.parse(err.error);
-          this.datos.cambiarTipo('danger');
-          this.datos.cambiarMensaje(error.message);
-          console.log('Error al crear: ' + error.message);
-          throw err;
-        }
-      );
-    } else {
-      this.datos.cambiarTipo('danger');
-      this.datos.cambiarMensaje('Fechas incorrectas.');
+        );
     }
   }
 
@@ -235,13 +227,5 @@ export class ReservaCrearComponent implements OnInit {
     return parsed && this.calendar.isValid(NgbDate.from(parsed))
       ? NgbDate.from(parsed)
       : currentValue;
-  }
-
-  getID(): Number {
-    if (this.reserva.guestID != undefined) {
-      return this.reserva.guestID;
-    } else {
-      return 0;
-    }
   }
 }

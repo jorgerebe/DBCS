@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { header, User } from '../app.model';
+import { header, Role, User } from '../app.model';
 import {
   HttpClient,
   HttpHeaders,
@@ -29,23 +29,55 @@ export class LoginService {
         console.log(response.status);
         console.log(response.body);
 
-        let header_token : header;
-        header_token = (response.body as header);
+        let header_token: header;
+        header_token = response.body as header;
 
         localStorage.setItem('access_token', header_token.access_token);
-
-        this.router.navigate(["/users"]);
+        this.getRole();
+        this.getID();
+        this.router.navigate(['/users']);
       });
   }
   getToken() {
     return localStorage.getItem('access_token');
   }
-  getRole() {
-    let jwtData = (this.getToken()?.split('.')[1] as string);
-    let decodedJwtJsonData = window.atob(jwtData);
-    let decodedJwtData = JSON.parse(decodedJwtJsonData);
-    return decodedJwtData['role'];
+  getRole(): Role | undefined {
+    var token = localStorage.getItem('access_token');
+    var rol;
+    if (token != null) {
+      var split = JSON.parse(window.atob(token.split('.')[1]));
 
+      rol = Role[split.role as keyof typeof Role];
+      return rol;
+    } else {
+      return undefined;
+    }
+  }
+  getID(): number | undefined {
+    var token = localStorage.getItem('access_token');
+    var id;
+    if (token != null) {
+      var split = JSON.parse(window.atob(token.split('.')[1]));
+
+      id = split.id;
+      console.log(id);
+      return id;
+    } else {
+      return undefined;
+    }
+  }
+  getName(): String {
+    var token = localStorage.getItem('access_token');
+    var name;
+    if (token != null) {
+      var split = JSON.parse(window.atob(token.split('.')[1]));
+
+      name = split.name;
+      console.log(name);
+      return name;
+    } else {
+      return '';
+    }
   }
   get isLoggedIn(): boolean {
     let authToken = localStorage.getItem('access_token');

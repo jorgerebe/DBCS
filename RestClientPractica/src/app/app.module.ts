@@ -20,6 +20,7 @@ import { LoginComponent } from './login/login.component';
 import { ReservaListarComponent } from './reserva-listar/reserva-listar.component';
 import { ReservaCrearComponent } from './reserva-crear/reserva-crear.component';
 import { DatePipe } from '@angular/common';
+import { ReservaEditarComponent } from './reserva-editar/reserva-editar.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { DatePipe } from '@angular/common';
     LoginComponent,
     ReservaListarComponent,
     ReservaCrearComponent,
+    ReservaEditarComponent,
   ],
   imports: [
     BrowserModule,
