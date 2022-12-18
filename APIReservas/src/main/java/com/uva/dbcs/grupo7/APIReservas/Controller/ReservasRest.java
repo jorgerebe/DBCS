@@ -63,7 +63,7 @@ public class ReservasRest {
             ReservaList = repository.findByGuestID(token.getId());
         }
         else if(token.isHost()){
-            ReservaList = repository.findAll(Sort.by(Sort.Direction.ASC, "created_at"));
+            ReservaList = repository.findAll(Sort.by(Sort.Direction.ASC, "createdAt"));
         }
         else{
             throw new ReservaException("No autorizado");
