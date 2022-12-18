@@ -30,7 +30,7 @@ public class Reserva {
 
 
     @Basic(optional = false)
-    private String guestID;
+    private Integer guestID;
 
 
 
@@ -84,7 +84,7 @@ public class Reserva {
 
     }
 
-    public Reserva(String guestName, String guestID, Float price, Integer units, Integer password, Integer numGuest, Status status, LocalDate dateIn, LocalDate dateOut) {
+    public Reserva(String guestName, Integer guestID, Float price, Integer units, Integer password, Integer numGuest, Status status, LocalDate dateIn, LocalDate dateOut) {
         this.guestName = guestName;
         this.guestID = guestID;
         this.price = price;
@@ -111,11 +111,11 @@ public class Reserva {
 	public void setGuestName(String guestName) {
 		this.guestName = guestName;
 	}
-	public String getGuestID() {
+	public Integer getGuestID() {
 		return this.guestID;
 	}
 
-	public void setGuestID(String guestID) {
+	public void setGuestID(Integer guestID) {
 		this.guestID = guestID;
 	}
 
