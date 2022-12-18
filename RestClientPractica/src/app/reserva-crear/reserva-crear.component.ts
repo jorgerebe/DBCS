@@ -112,6 +112,12 @@ export class ReservaCrearComponent implements OnInit {
     this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
     this.reserva.guestID = loginService.getID() || 0;
     this.reserva.guestName = loginService.getName();
+
+    this.reservaApiRest.getPrice().subscribe((resp) => {
+      if (resp.status < 400) {
+        this.reserva.price = resp.body || 25;
+      }
+    });
   }
 
   today() {

@@ -55,6 +55,12 @@ public class ReservasRest {
         return ReservaList;
     }
 
+    @GetMapping(value="/price")
+    public Float getPrecio() {
+
+        return this.precio;
+    }
+
     @GetMapping(value = "/availability")
     public List<Reserva> getAvailability(@RequestBody DateRange dates) {
         if(dates.getDateIn().isAfter(dates.getDateOut())){

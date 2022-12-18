@@ -57,4 +57,8 @@ export class ReservaApiRestService {
     let url = ReservaApiRestService.BASE_URI + 'availability';
     return this.http.request('GET', url, { body: fechas, observe: 'response' });
   }
+  getPrice(): Observable<HttpResponse<number>> {
+    let url = ReservaApiRestService.BASE_URI + 'price';
+    return this.http.get<number>(url, { observe: 'response' });
+  }
 }
