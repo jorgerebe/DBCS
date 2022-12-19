@@ -17,6 +17,7 @@
             name="guestID"
             #guestID="ngModel"
             [ngClass]="{ 'is-invalid': guestID.invalid }"
+            [disabled]="true"
           />
           <div class="invalid-feedback" *ngIf="guestID.invalid">
             <p *ngIf="guestID.errors?.['required']">El apodo es obligatorio.</p>
@@ -46,13 +47,16 @@
         <div class="col-sm-3">
           <label class="control-label" for="price">Precio</label>
           <input
-            type="text"
+            type="number"
+            min="1"
             class="form-control"
             required
+            step="0.1"
             [(ngModel)]="reserva.price"
             name="price"
             #price="ngModel"
             [ngClass]="{ 'is-invalid': price.invalid }"
+            [disabled]="true"
           />
           <div class="invalid-feedback" *ngIf="price.invalid">
             <p *ngIf="price.errors?.['required']">
@@ -67,7 +71,8 @@
             >Número de habitaciones</label
           >
           <input
-            type="text"
+            type="number"
+            min="1"
             class="form-control"
             required
             [(ngModel)]="reserva.units"
@@ -78,7 +83,7 @@
           />
           <div class="invalid-feedback" *ngIf="units.invalid">
             <p *ngIf="units.errors?.['required']">
-              El correo electrónico es obligatorio.
+              Debe ser un número mayor que cero.
             </p>
           </div>
         </div>
@@ -87,20 +92,21 @@
           <label class="control-label" for="numGuest"
             >Número de huéspedes</label
           >
-          <input
-            type="numGuest"
-            class="form-control"
-            required
-            [(ngModel)]="reserva.numGuest"
-            name="numGuest"
-            #numGuest="ngModel"
-            [ngClass]="{ 'is-invalid': numGuest.invalid }"
-          />
-          <div class="invalid-feedback" *ngIf="numGuest.invalid">
-            <p *ngIf="numGuest.errors?.['required']">
-              La contraseña es obligatoria.
-            </p>
-          </div>
+           <input
+          type="number"
+          min="1"
+          class="form-control"
+          required
+          [(ngModel)]="reserva.numGuest"
+          name="numGuest"
+          #numGuest="ngModel"
+          [ngClass]="{ 'is-invalid': numGuest.invalid }"
+        />
+        <div class="invalid-feedback" *ngIf="numGuest.invalid">
+          <p *ngIf="numGuest.errors?.['required']">
+            Debe ser un número mayor que cero.
+          </p>
+        </div>
         </div>
       </div>
 

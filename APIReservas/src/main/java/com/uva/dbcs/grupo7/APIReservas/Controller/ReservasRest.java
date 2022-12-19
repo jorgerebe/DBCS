@@ -1,5 +1,7 @@
 package com.uva.dbcs.grupo7.APIReservas.Controller;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.List;
 
@@ -117,7 +119,8 @@ public class ReservasRest {
         existente.setDateIn(res.getDateIn());
         existente.setDateOut(res.getDateOut());
         existente.setNumGuest(res.getNumGuest());
-        existente.setPrice(res.getPrice());
+        long ndays = ChronoUnit.DAYS.between(res.getDateIn(), res.getDateOut());
+        existente.setPrice(ndays*precio);
         existente.setUnits(res.getUnits());
         existente.setStatus(res.getStatus());
 

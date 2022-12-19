@@ -54,7 +54,7 @@ public class Reserva {
 
 
     @Column(nullable = false)
-    private Status status;
+    private Status status = Status.PENDING;
 
 
 
