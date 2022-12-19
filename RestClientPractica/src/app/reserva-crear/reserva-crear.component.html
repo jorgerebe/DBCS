@@ -46,7 +46,7 @@
       </div>
       <div class="form-group row">
         <div class="col-sm-3">
-          <label class="control-label" for="price">Precio</label>
+          <label class="control-label" for="price">Precio por día: {{pricePerDay}}</label>
           <input
             type="number"
             min="1"
@@ -119,6 +119,7 @@
             [(ngModel)]="reserva.status"
             name="status"
             #role="ngModel"
+            [disabled]="true"
           >
             <option *ngFor="let st of status | keyvalue" [ngValue]="st.value">
               {{ st.value }}

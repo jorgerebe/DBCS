@@ -80,6 +80,7 @@
             #units="ngModel"
             [ngClass]="{ 'is-invalid': units.invalid }"
             units
+            [disabled]="true"
           />
           <div class="invalid-feedback" *ngIf="units.invalid">
             <p *ngIf="units.errors?.['required']">
