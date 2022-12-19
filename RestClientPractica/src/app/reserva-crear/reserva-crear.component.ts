@@ -16,6 +16,7 @@ import { LoginService } from '../shared/login/login-service.service';
 @Injectable()
 export class CustomAdapter extends NgbDateAdapter<string> {
   readonly DELIMITER = '/';
+  pricePerDay = 0;
 
   fromModel(value: string | null): NgbDateStruct | null {
     if (value) {
@@ -83,7 +84,7 @@ export class ReservaCrearComponent implements OnInit {
     id: 0,
     guestName: '',
     guestID: 0,
-    price: 1.57,
+    price: 0,
     units: 1,
     numGuest: 1,
     status: Status.CONFIRMED,

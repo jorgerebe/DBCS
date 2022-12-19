@@ -24,10 +24,6 @@ export class ReservaApiRestService {
   ): Observable<HttpResponse<Reserva[]>> {
     let url = ReservaApiRestService.BASE_URI;
 
-    if (enabled !== undefined) {
-      url = url.substring(0, url.length - 1) + '?enabled' + '=' + enabled;
-    }
-
     console.log(url);
 
     return this.http.get<Reserva[]>(url, { observe: 'response' });
