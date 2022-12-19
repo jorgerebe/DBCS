@@ -16,7 +16,6 @@ import { LoginService } from '../shared/login/login-service.service';
 @Injectable()
 export class CustomAdapter extends NgbDateAdapter<string> {
   readonly DELIMITER = '/';
-  pricePerDay = 0;
 
   fromModel(value: string | null): NgbDateStruct | null {
     if (value) {
@@ -71,6 +70,8 @@ export class CustomDateParserFormatter extends NgbDateParserFormatter {
 export class ReservaCrearComponent implements OnInit {
   hoveredDate: NgbDate | null = null;
 
+  pricePerDay:Number = 0;
+
   fromDate: NgbDate | null;
   toDate: NgbDate | null;
   status = Status;
@@ -87,7 +88,7 @@ export class ReservaCrearComponent implements OnInit {
     price: 0,
     units: 1,
     numGuest: 1,
-    status: Status.CONFIRMED,
+    status: Status.PENDING,
     dateIn: new Date(),
     dateOut: new Date(),
     createdAt: new Date(),
@@ -126,6 +127,7 @@ export class ReservaCrearComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     this.subscriptionTipo = this.datos.tipoActual.subscribe((valor) => {
       this.tipoMensaje = valor;
     });
@@ -143,6 +145,26 @@ export class ReservaCrearComponent implements OnInit {
       },
       (err) => console.log('Error al traer id para editar')
     );
+
+
+    this.reservaApiRest.getPrice().subscribe(
+      (resp) => {
+        if (resp.status < 400) {
+          this.datos.cambiarTipo('success');
+          this.pricePerDay = (resp.body as Number);
+        } else {
+          this.datos.cambiarMensaje('Error al añadir reserva');
+        }
+      },
+      (err) => {
+        let error = JSON.parse(err.error);
+        this.datos.cambiarTipo('danger');
+        this.datos.cambiarMensaje(error.message);
+        console.log('Error al crear: ' + error.message);
+        throw err;
+      }
+    );
+
   }
 
   ngOnDestroy() {
@@ -170,6 +192,7 @@ export class ReservaCrearComponent implements OnInit {
       this.reserva.dateIn = test;
       this.reserva.dateOut = test2;
       console.log(this.reserva.dateIn);
+      console.log(this.reserva);
       this.reservaApiRest.anadirReserva(this.reserva).subscribe(
         (resp) => {
           if (resp.status < 400) {

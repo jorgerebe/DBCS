@@ -45,6 +45,9 @@ public class ReservasRest {
             throw new ReservaException("No autorizado");
         }
 
+        long ndays = ChronoUnit.DAYS.between(newReserva.getDateIn(), newReserva.getDateOut());
+        newReserva.setPrice(ndays*precio);
+
         response.setHeader("Content-type", "application/json");
         if(rooms - repository.findAllByDateInGreaterThanEqualAndDateOutLessThanEqual(newReserva.getDateIn(),newReserva.getDateOut()).size() < newReserva.getUnits()){
             throw new ReservaException("No quedan habitaciones suficientes para realizar esta reserva.");
