@@ -70,7 +70,7 @@ export class CustomDateParserFormatter extends NgbDateParserFormatter {
 export class ReservaCrearComponent implements OnInit {
   hoveredDate: NgbDate | null = null;
 
-  pricePerDay:Number = 0;
+  pricePerDay:number = 0;
 
   fromDate: NgbDate | null;
   toDate: NgbDate | null;
@@ -96,6 +96,7 @@ export class ReservaCrearComponent implements OnInit {
   };
 
   reserva = this.reservaVacia as Reserva;
+
   id!: String;
   operacion!: String;
   constructor(
@@ -111,9 +112,13 @@ export class ReservaCrearComponent implements OnInit {
     private loginService: LoginService
   ) {
     this.fromDate = calendar.getToday();
-    this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);
+    this.toDate = calendar.getNext(calendar.getToday(), 'd', 3);
+    
     this.reserva.guestID = loginService.getID() || 0;
     this.reserva.guestName = loginService.getName();
+    /*let dateOutNueva = new Date();
+    dateOutNueva.setDate(dateOutNueva.getDate()+3);
+    this.reserva.dateOut=dateOutNueva;*/
 
     this.reservaApiRest.getPrice().subscribe((resp) => {
       if (resp.status < 400) {
@@ -151,7 +156,8 @@ export class ReservaCrearComponent implements OnInit {
       (resp) => {
         if (resp.status < 400) {
           this.datos.cambiarTipo('success');
-          this.pricePerDay = (resp.body as Number);
+          this.pricePerDay = (resp.body as number);
+          this.actualizarPrecio();
         } else {
           this.datos.cambiarMensaje('Error al añadir reserva');
         }
@@ -222,6 +228,7 @@ export class ReservaCrearComponent implements OnInit {
   }
 
   onDateSelection(date: NgbDate) {
+
     if (!this.fromDate && !this.toDate) {
       this.fromDate = date;
     } else if (
@@ -235,6 +242,8 @@ export class ReservaCrearComponent implements OnInit {
       this.toDate = null;
       this.fromDate = date;
     }
+
+    this.actualizarPrecio();
   }
 
   isHovered(date: NgbDate) {
@@ -273,5 +282,28 @@ export class ReservaCrearComponent implements OnInit {
     } else {
       return 0;
     }
+  }
+
+  actualizarPrecio(){
+
+    var datein = new Date(this.fromDate?.year as number, this.fromDate?.month as number, this.fromDate?.day as number);
+    var dateout = new Date(this.toDate?.year as number, this.toDate?.month as number, this.toDate?.day as number);
+
+    var date1:number = (datein.valueOf() as number);
+    var date2:number = (dateout.valueOf() as number);
+
+    if(isNaN(date1) || isNaN(date2)){
+      return;
+    }
+
+    console.log(date2)
+    console.log(date1)
+
+    var diff = Math.abs(date2 - date1);
+    var diffDays = Math.ceil(diff / (1000 * 3600 * 24));
+
+    console.log(diff);
+
+    this.reserva.price = this.pricePerDay * diffDays * (this.reserva.units as number); 
   }
 }
