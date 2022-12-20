@@ -46,7 +46,7 @@
       </div>
       <div class="form-group row">
         <div class="col-sm-3">
-          <label class="control-label" for="price">Precio por día: {{pricePerDay}}</label>
+          <label class="control-label" for="price">Precio (precio cada día {{pricePerDay}}€)</label>
           <input
             type="number"
             min="1"
@@ -72,6 +72,7 @@
             >Número de habitaciones</label
           >
           <input
+            (change)="actualizarPrecio()"
             type="number"
             min="1"
             class="form-control"
@@ -146,6 +147,7 @@
                 outsideDays="hidden"
                 [startDate]="fromDate!"
                 [minDate]="today()"
+                [defaultValue]="3"
               />
               <ng-template #t let-date let-focused="focused">
                 <span
@@ -170,6 +172,7 @@
               name="dpFromDate"
               [value]="formatter.format(fromDate)"
               (input)="fromDate = validateInput(fromDate, dpFromDate.value)"
+              [disabled]="true"
             />
             <button
               class="btn btn-outline-secondary"
@@ -190,6 +193,7 @@
               name="dpToDate"
               [value]="formatter.format(toDate)"
               (input)="toDate = validateInput(toDate, dpToDate.value)"
+              [disabled]="true"
             />
             <button
               class="btn btn-outline-secondary"

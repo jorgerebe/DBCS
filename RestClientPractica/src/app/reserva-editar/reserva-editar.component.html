@@ -1,5 +1,5 @@
 <app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
-<h3 class="titulo mt-4 offset-sm-3">Creación de reserva</h3>
+<h3 class="titulo mt-4 offset-sm-3">Edición de reserva</h3>
 <div class="container">
   <div class="offset-sm-3 col-sm-9">
     <form
@@ -145,6 +145,7 @@
                 outsideDays="hidden"
                 [startDate]="fromDate!"
                 [minDate]="today()"
+                [disabled]="true"
               />
               <ng-template #t let-date let-focused="focused">
                 <span
@@ -169,6 +170,7 @@
               name="dpFromDate"
               [value]="formatter.format(fromDate)"
               (input)="fromDate = validateInput(fromDate, dpFromDate.value)"
+              [disabled]="true"
             />
             <button
               class="btn btn-outline-secondary"
@@ -189,6 +191,7 @@
               name="dpToDate"
               [value]="formatter.format(toDate)"
               (input)="toDate = validateInput(toDate, dpToDate.value)"
+              [disabled]="true"
             />
             <button
               class="btn btn-outline-secondary"
