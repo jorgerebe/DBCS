@@ -35,7 +35,9 @@ export class LoginService {
         localStorage.setItem('access_token', header_token.access_token);
         this.getRole();
         this.getID();
-        this.router.navigate(['/users']);
+        this.router.navigate(['/users']).then(() => {
+          window.location.reload();
+        });
       });
   }
   getToken() {
@@ -86,7 +88,9 @@ export class LoginService {
   doLogout() {
     let removeToken = localStorage.removeItem('access_token');
     if (removeToken == null) {
-      this.router.navigate(['login']);
+      this.router.navigate(['login']).then(() => {
+        window.location.reload();
+      });
     }
   }
 }
