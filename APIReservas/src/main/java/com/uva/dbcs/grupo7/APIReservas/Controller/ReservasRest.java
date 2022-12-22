@@ -1,6 +1,5 @@
 package com.uva.dbcs.grupo7.APIReservas.Controller;
 
-import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.List;
@@ -17,6 +16,7 @@ import com.uva.dbcs.grupo7.APIReservas.Repository.ReservaRepository;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -28,17 +28,19 @@ import org.springframework.web.bind.annotation.*;
 public class ReservasRest {
 
     private final ReservaRepository repository;
-    // Pasar a variables de entorno cuando acabemos
-    /* @Value("${Price}") */
-    private Float precio = 40f;
-   /*  @Value("${Rooms}") */
-    private Integer rooms = 10;
+
+    @Value("${Price}")
+    private Float precio;
+    @Value("${Rooms}")
+    private Integer rooms;
     ReservasRest(ReservaRepository repository) {
         this.repository = repository;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public String newReserva(@RequestHeader ("authorization") String tokenHeader, @RequestBody Reserva newReserva, HttpServletResponse response) {
+
+        response.setHeader("Content-type", "application/json");
 
         Token token = getToken(tokenHeader);
         if(!token.isGuest()){
@@ -48,8 +50,15 @@ public class ReservasRest {
         long ndays = ChronoUnit.DAYS.between(newReserva.getDateIn(), newReserva.getDateOut());
         newReserva.setPrice(ndays*precio);
 
-        response.setHeader("Content-type", "application/json");
-        if(rooms - repository.findAllByDateInGreaterThanEqualAndDateOutLessThanEqual(newReserva.getDateIn(),newReserva.getDateOut()).size() < newReserva.getUnits()){
+        List<Reserva> reservas = repository.findAllByDateInGreaterThanEqualAndDateOutLessThanEqual(newReserva.getDateIn(),newReserva.getDateOut());
+
+        int nHabitaciones = 0;
+
+        for(Reserva reserva : reservas){
+            nHabitaciones += reserva.getUnits();
+        }
+
+        if(rooms - nHabitaciones < newReserva.getUnits()){
             throw new ReservaException("No quedan habitaciones suficientes para realizar esta reserva.");
         }
 

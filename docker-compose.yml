@@ -184,6 +184,8 @@ services:
       - kong-net
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://Reservas-database:3306/Reservas?createDatabaseIfNotExist=true
+      Price: 40
+      Rooms: 10
     depends_on:
       - Reservas-database
 
