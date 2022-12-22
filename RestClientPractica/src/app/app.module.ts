@@ -21,6 +21,7 @@ import { ReservaListarComponent } from './reserva-listar/reserva-listar.componen
 import { ReservaCrearComponent } from './reserva-crear/reserva-crear.component';
 import { DatePipe } from '@angular/common';
 import { ReservaEditarComponent } from './reserva-editar/reserva-editar.component';
+import { ReservaAvailabilityComponent } from './reserva-availability/reserva-availability.component';
 import { StatusPipePipe } from './shared/status-pipe.pipe';
 
 @NgModule({
@@ -34,6 +35,7 @@ import { StatusPipePipe } from './shared/status-pipe.pipe';
     ReservaListarComponent,
     ReservaCrearComponent,
     ReservaEditarComponent,
+    ReservaAvailabilityComponent,
     StatusPipePipe,
   ],
   imports: [

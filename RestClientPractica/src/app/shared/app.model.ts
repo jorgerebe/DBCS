@@ -44,3 +44,15 @@ export interface DateRange {
   dateIn: Date;
   dateOut: Date;
 }
+
+export interface Availability {
+  day:number;
+  month:number;
+  year:number;
+  nRooms:number;
+}
+
+export interface datos{
+  dateIn: number[];
+  dateOut: number[];
+}

@@ -16,6 +16,7 @@ import com.uva.dbcs.grupo7.APIReservas.Model.Token;
 import com.uva.dbcs.grupo7.APIReservas.Repository.ReservaRepository;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
@@ -94,7 +95,20 @@ public class ReservasRest {
     }
 
     @GetMapping(value = "/availability")
-    public int[] getAvailability(@RequestHeader ("authorization") String tokenHeader, @RequestBody DateRange dates) {
+    public int[] getAvailability(@RequestHeader ("authorization") String tokenHeader, @RequestHeader ("rango") String jsonDates) {
+
+        System.out.println(jsonDates);
+
+        DateRange dates;
+
+        JSONObject jsonObject = new JSONObject(jsonDates);
+        JSONArray dateInJson = jsonObject.getJSONArray("dateIn");
+        JSONArray dateOutJson = jsonObject.getJSONArray("dateOut");
+
+        LocalDate dateIn = LocalDate.of(dateInJson.getInt(0), dateInJson.getInt(1), dateInJson.getInt(2));
+        LocalDate dateOut = LocalDate.of(dateOutJson.getInt(0), dateOutJson.getInt(1), dateOutJson.getInt(2));
+
+        dates = new DateRange(dateIn, dateOut);
 
         if(dates.getDateIn().isAfter(dates.getDateOut())){
             throw new ReservaException("La fecha inicial tiene que ser anterior a la final.");
