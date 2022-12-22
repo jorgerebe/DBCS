@@ -1,5 +1,6 @@
 package com.uva.dbcs.grupo7.APIReservas.Controller;
 
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.List;
@@ -93,13 +94,35 @@ public class ReservasRest {
     }
 
     @GetMapping(value = "/availability")
-    public List<Reserva> getAvailability(@RequestHeader ("authorization") String tokenHeader, @RequestBody DateRange dates) {
+    public int[] getAvailability(@RequestHeader ("authorization") String tokenHeader, @RequestBody DateRange dates) {
 
         if(dates.getDateIn().isAfter(dates.getDateOut())){
             throw new ReservaException("La fecha inicial tiene que ser anterior a la final.");
         }
         List<Reserva> ReservaList = repository.findAllByDateInGreaterThanEqualAndDateOutLessThanEqual(dates.getDateIn(), dates.getDateOut());
-        return ReservaList;
+
+        long ndias = dates.getDateIn().datesUntil(dates.getDateOut()).count();
+
+        LocalDate dateIni = dates.getDateIn();
+
+        int[] dias = new int[(int)ndias];
+
+        for(int i = 0; i < ndias; i++){
+            dias[i] += 10;
+        }
+
+        for(int i = 0; i < ndias; i++){
+            for(Reserva reserva : ReservaList){
+                if(reserva.getDateIn().isEqual(dateIni) || reserva.getDateOut().isEqual(dateIni)
+                || ((reserva.getDateIn().isBefore(dateIni) && reserva.getDateOut().isAfter(dateIni)))){
+                    dias[i] -= reserva.getUnits();
+                }
+            }
+            dateIni = dateIni.plusDays(1);
+        }
+
+
+        return dias;
     }
 
     @GetMapping(value = { "/{id}" })
