@@ -121,4 +121,8 @@ export class ReservaListarComponent implements OnInit {
       this.filterFechasOption = '';
     }
   }
+  clearFilters() {
+    this.filterFechasOption = '';
+    this.filterOption = '';
+  }
 }
