@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Reserva } from '../shared/app.model';
+import { Reserva, Status } from '../shared/app.model';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NgbAlert } from '@ng-bootstrap/ng-bootstrap';
@@ -19,9 +19,18 @@ export class ReservaListarComponent implements OnInit {
   mensaje!: string;
   enabled: boolean | undefined;
   private role;
+  status = Status;
   subscriptionTipo!: Subscription;
   subscriptionMensaje!: Subscription;
-
+  filterPost: any;
+  filterPostFechas: any;
+  filterOption!: string;
+  filterFechasOption!: string;
+  ChooseCriteria = [
+    { category: 'Fruits', id: 1, checked: false },
+    { category: 'Animals', id: 2, checked: false },
+  ];
+  selectedIndex!: number;
   constructor(
     private ruta: ActivatedRoute,
     private router: Router,
@@ -100,6 +109,16 @@ export class ReservaListarComponent implements OnInit {
       return this.role.toString();
     } else {
       return '';
+    }
+  }
+
+  filterFechas(x: string) {
+    if (x == 'before') {
+      this.filterFechasOption = x;
+    } else if (x == 'after') {
+      this.filterFechasOption = x;
+    } else {
+      this.filterFechasOption = '';
     }
   }
 }
