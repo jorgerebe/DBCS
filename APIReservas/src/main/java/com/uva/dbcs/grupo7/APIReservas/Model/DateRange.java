@@ -10,6 +10,11 @@ public class DateRange {
     @JsonFormat( pattern = "dd/MM/yyyy")
     private LocalDate dateOut;
 
+	public DateRange(LocalDate dateIn, LocalDate dateOut){
+		this.dateIn = dateIn;
+		this.dateOut = dateOut;
+	}
+
 	public LocalDate getDateIn() {
 		return this.dateIn;
 	}

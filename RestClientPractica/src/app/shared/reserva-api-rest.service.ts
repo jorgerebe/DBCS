@@ -4,8 +4,9 @@ import {
   HttpResponse,
   HttpHeaders,
   HttpParams,
+  HttpErrorResponse,
 } from '@angular/common/http';
-import { Reserva, DateRange } from './app.model';
+import { Reserva, DateRange, datos } from './app.model';
 import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
@@ -49,9 +50,12 @@ export class ReservaApiRestService {
     let url = ReservaApiRestService.BASE_URI + id;
     return this.http.get<Reserva>(url, { observe: 'response' });
   }
-  getAvailability(fechas: DateRange) {
+  getAvailability(fechas: datos) {
+    console.log('SERVICE');
+    console.log(JSON.stringify(fechas))
+
     let url = ReservaApiRestService.BASE_URI + 'availability';
-    return this.http.request('GET', url, { body: fechas, observe: 'response' });
+    return this.http.get<number[]>(url, {headers: {'rango': JSON.stringify(fechas)}, observe:'response'});
   }
   
   getPrice(): Observable<HttpResponse<number>> {
