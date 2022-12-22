@@ -9,6 +9,7 @@
               type="button"
               class="btn btn-primary btnfechas"
               (click)="filterFechas('before')"
+              *ngIf="getRole() == 'HOST'"
               [disabled]="filterFechasOption == 'before'"
             >
               15 Días previos
@@ -18,6 +19,7 @@
               type="button"
               class="btn btn-primary btnfechas"
               (click)="filterFechas('after')"
+              *ngIf="getRole() == 'HOST'"
               [disabled]="filterFechasOption == 'after'"
             >
               15 Días después
