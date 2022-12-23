@@ -24,26 +24,27 @@ export class ReservaAvailabilityComponent implements OnInit {
     dateOut : new Date()
   }
 
-  dateInNumber : number = new Date().getDate();
-  dateOutNumber:number = new Date().getDate() + 15;
+  dayOffset = 15;
+  millisecondOffset = this.dayOffset * 24 * 60 * 60 * 1000;
+
+  /*dateInNumber : number = new Date().getDate();
+  dateOutNumber:number = new Date().getDate() + 15;*/
 
   constructor(private router:Router, public datepipe: DatePipe, private reservaApiRest: ReservaApiRestService) { }
 
   ngOnInit(): void {
+    this.dates.dateOut = this.addDays(this.dates.dateOut, 15);
     this.actualizarDisponibilidad();  
   }
 
   actualizarDisponibilidad(){
-
-    this.dates.dateIn.setDate(this.dateInNumber);
-    this.dates.dateOut.setDate(this.dateOutNumber);
 
     this.fechas.dateIn = [this.dates.dateIn.getFullYear(), this.dates.dateIn.getMonth()+1, this.dates.dateIn.getDate()];
     this.fechas.dateOut = [this.dates.dateOut.getFullYear(), this.dates.dateOut.getMonth()+1, this.dates.dateOut.getDate()];
 
     console.log(this.fechas);
 
-    var currentDate:Date = this.dates.dateIn;
+    var currentDate:Date = this.addDays(this.dates.dateIn, 0);
 
     this.reservaApiRest.getAvailability(this.fechas).subscribe(
       (resp) => {
@@ -78,18 +79,30 @@ export class ReservaAvailabilityComponent implements OnInit {
 
   verSiguientes(){
     this.Availabilities = [];
-    this.dateInNumber += 15;
-    this.dateOutNumber += 15;
+
+    this.dates.dateIn = this.addDays(this.dates.dateIn, 15);
+    this.dates.dateOut = this.addDays(this.dates.dateOut, 15);
+
     this.actualizarDisponibilidad();
   }
 
   verAnteriores(){
     this.Availabilities = [];
 
-    this.dateInNumber -= 15;
-    this.dateOutNumber -= 15;
+    this.dates.dateIn = this.addDays(this.dates.dateIn, -15);
+    this.dates.dateOut = this.addDays(this.dates.dateOut, -15);
 
     this.actualizarDisponibilidad();
+  }
+
+  addDays(date:Date, days:number) {
+    var result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  }
+
+  encimaLimiteInferior(){
+    return this.dates.dateIn.getTime() > new Date().getTime();
   }
 
 }
