@@ -26,10 +26,7 @@ export class ReservaListarComponent implements OnInit {
   filterPostFechas: any;
   filterOption!: string;
   filterFechasOption!: string;
-  ChooseCriteria = [
-    { category: 'Fruits', id: 1, checked: false },
-    { category: 'Animals', id: 2, checked: false },
-  ];
+  
   selectedIndex!: number;
   constructor(
     private ruta: ActivatedRoute,
