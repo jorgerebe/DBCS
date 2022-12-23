@@ -1,0 +1,31 @@
+<h3 class="titulo mt-2 mb-4">Disponibilidad de habitaciones</h3>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="button-box col mb-3">
+        <a *ngIf="encimaLimiteInferior()" class="btn btn-primary me-3"  (click)="verAnteriores()">Anteriores 15 días</a>
+        <a class="btn btn-primary" (click)="verSiguientes()">Siguientes 15 días</a>
+     </div>
+      <div class="row">
+      </div>
+      <table class="table table-striped text-center">
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Habitaciones disponibles</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let availability of Availabilities">
+            <td>
+              <i>{{ availability.day}}/{{ availability.month}}/{{availability.year}}</i>
+            </td>
+            <td>
+              <i>{{availability.nRooms}}</i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

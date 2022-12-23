@@ -1,0 +1,224 @@
+<app-toasts aria-live="polite" aria-atomic="true"></app-toasts>
+<h3 class="titulo mt-4 offset-sm-3">Edición de reserva</h3>
+<div class="container">
+  <div class="offset-sm-3 col-sm-9">
+    <form
+      (ngSubmit)="reservaForm.form.valid && onSubmit()"
+      #reservaForm="ngForm"
+    >
+      <div class="form-group row">
+        <div class="offset-sm-0 col-sm-3">
+          <label class="control-label" for="guestID">ID del Huésped</label>
+          <input
+            type="text"
+            class="form-control"
+            required
+            [(ngModel)]="reserva.guestID"
+            name="guestID"
+            #guestID="ngModel"
+            [ngClass]="{ 'is-invalid': guestID.invalid }"
+            [disabled]="true"
+          />
+          <div class="invalid-feedback" *ngIf="guestID.invalid">
+            <p *ngIf="guestID.errors?.['required']">El apodo es obligatorio.</p>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <label class="control-label" for="guestName"
+            >Nombre del huésped</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            required
+            [(ngModel)]="reserva.guestName"
+            name="guestName"
+            #guestName="ngModel"
+            [ngClass]="{ 'is-invalid': guestName.invalid }"
+          />
+          <div class="invalid-feedback" *ngIf="guestName.invalid">
+            <p *ngIf="guestName.errors?.['required']">
+              El nombre es obligatorio.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-3">
+          <label class="control-label" for="price">Precio</label>
+          <input
+            type="number"
+            min="1"
+            class="form-control"
+            required
+            step="0.1"
+            [(ngModel)]="reserva.price"
+            name="price"
+            #price="ngModel"
+            [ngClass]="{ 'is-invalid': price.invalid }"
+            [disabled]="true"
+          />
+          <div class="invalid-feedback" *ngIf="price.invalid">
+            <p *ngIf="price.errors?.['required']">
+              El apellido es obligatorio.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-3">
+          <label class="control-label" name="units" for="units"
+            >Número de habitaciones</label
+          >
+          <input
+            type="number"
+            min="1"
+            class="form-control"
+            required
+            [(ngModel)]="reserva.units"
+            name="units"
+            #units="ngModel"
+            [ngClass]="{ 'is-invalid': units.invalid }"
+            units
+            [disabled]="true"
+          />
+          <div class="invalid-feedback" *ngIf="units.invalid">
+            <p *ngIf="units.errors?.['required']">
+              Debe ser un número mayor que cero.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-sm-3">
+          <label class="control-label" for="numGuest"
+            >Número de huéspedes</label
+          >
+           <input
+          type="number"
+          min="1"
+          class="form-control"
+          required
+          [(ngModel)]="reserva.numGuest"
+          name="numGuest"
+          #numGuest="ngModel"
+          [ngClass]="{ 'is-invalid': numGuest.invalid }"
+        />
+        <div class="invalid-feedback" *ngIf="numGuest.invalid">
+          <p *ngIf="numGuest.errors?.['required']">
+            Debe ser un número mayor que cero.
+          </p>
+        </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-sm-3">
+          <label class="control-label" for="status">Estado</label>
+          <select
+            class="form-select form-select-sm"
+            [(ngModel)]="reserva.status"
+            name="status"
+            #role="ngModel"
+          >
+            <option *ngFor="let st of status | keyvalue" [ngValue]="st.value">
+              {{ st.value }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- asd -->
+      <div class="form-group row">
+        <div class="col-sm-3">
+          <label class="control-label" for="status">Fecha inicial</label>
+          <div class="dp-hidden position-absolute">
+            <div class="input-group">
+              <input
+                name="datepicker"
+                class="form-control"
+                ngbDatepicker
+                #datepicker="ngbDatepicker"
+                [autoClose]="'outside'"
+                (dateSelect)="onDateSelection($event)"
+                [displayMonths]="2"
+                [dayTemplate]="t"
+                outsideDays="hidden"
+                [startDate]="fromDate!"
+                [minDate]="today()"
+                [disabled]="true"
+              />
+              <ng-template #t let-date let-focused="focused">
+                <span
+                  class="custom-day"
+                  [class.focused]="focused"
+                  [class.range]="isRange(date)"
+                  [class.faded]="isHovered(date) || isInside(date)"
+                  (mouseenter)="hoveredDate = date"
+                  (mouseleave)="hoveredDate = null"
+                >
+                  {{ date.day }}
+                </span>
+              </ng-template>
+            </div>
+          </div>
+
+          <div class="input-group">
+            <input
+              #dpFromDate
+              class="form-control"
+              placeholder="dd/mm/yyyy"
+              name="dpFromDate"
+              [value]="formatter.format(fromDate)"
+              (input)="fromDate = validateInput(fromDate, dpFromDate.value)"
+              [disabled]="true"
+            />
+            <button
+              class="btn btn-outline-secondary"
+              (click)="datepicker.toggle()"
+              type="button"
+            >
+              <i class="fa fa-calendar"></i>
+            </button>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <label class="control-label" for="status">Fecha final</label>
+          <div class="input-group">
+            <input
+              #dpToDate
+              class="form-control"
+              placeholder="dd/mm/yyyy"
+              name="dpToDate"
+              [value]="formatter.format(toDate)"
+              (input)="toDate = validateInput(toDate, dpToDate.value)"
+              [disabled]="true"
+            />
+            <button
+              class="btn btn-outline-secondary"
+              (click)="datepicker.toggle()"
+              type="button"
+            >
+              <i class="fa fa-calendar"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- asd -->
+      <div class="form-group row">
+        <div class="offset-sm-4 col-sm-1 d-grid gap-2">
+          <button
+            type="submit"
+            class="btn btn-primary btn-block"
+            [disabled]="!reservaForm.form.valid"
+          >
+            Aceptar
+          </button>
+        </div>
+        <div class="col-sm-1">
+          <button type="reset" class="btn btn-primary btn-block">Borrar</button>
+        </div>
+      </div>
+      <div class="form-group row-3"></div>
+    </form>
+  </div>
+</div>

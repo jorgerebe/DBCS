@@ -1,19 +1,93 @@
 <header>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav
+    *ngIf="isUrlUsers()"
+    class="navbar navbar-expand-lg navbar-light bg-light"
+  >
     <a class="navbar-brand" [routerLink]="['/users/']">Gestor de usuarios</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-item nav-link active" [routerLink]="['/users/nuevo']">Crear usuario</a>
-        <a class="nav-item nav-link active" [routerLink]="['/users']" [queryParams]="{enabled:'true'}">Ver activados</a>
-        <a class="nav-item nav-link active" [routerLink]="['/users']" [queryParams]="{enabled:'false'}">Ver desactivados</a>
+        <a class="nav-item nav-link active" [routerLink]="['/users/nuevo']"
+          >Crear usuario</a
+        >
+        <a
+          class="nav-item nav-link active"
+          [routerLink]="['/users']"
+          [queryParams]="{ enabled: 'true' }"
+          >Ver activados</a
+        >
+        <a
+          class="nav-item nav-link active"
+          [routerLink]="['/users']"
+          [queryParams]="{ enabled: 'false' }"
+          >Ver desactivados</a
+        >
+        <a class="nav-item nav-link active" [routerLink]="['/reservas']"
+          >Gestión de reservas</a
+        >
       </div>
     </div>
     <form class="form-inline">
-      <button type="button" class="btn btn-primary btn-block" *ngIf="isLogged()" (click)="logOut()">
-          <span class=""></span> Log out <i class="bi bi-door-closed"></i>
+      <button
+        type="button"
+        class="btn btn-primary btn-block"
+        *ngIf="isLogged()"
+        (click)="logOut()"
+      >
+        <span class=""></span> Log out <i class="bi bi-door-closed"></i>
+      </button>
+    </form>
+  </nav>
+  <nav
+    *ngIf="isUrlReservas()"
+    class="navbar navbar-expand-lg navbar-light bg-light"
+  >
+    <a class="navbar-brand" [routerLink]="['/reservas/']">Gestor de reservas</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a
+          *ngIf="getRole() == 'GUEST'"
+          class="nav-item nav-link active"
+          [routerLink]="['/reservas/nuevo']"
+          >Crear reserva</a
+        >
+        <a class="nav-item nav-link active" [routerLink]="['/reservas/disponibilidad']"
+          >Disponibilidad</a
+        >
+        <a class="nav-item nav-link active" [routerLink]="['/users']"
+          >Gestión de usuarios</a
+        >
+      </div>
+    </div>
+    <form class="form-inline">
+      <button
+        type="button"
+        class="btn btn-primary btn-block"
+        *ngIf="isLogged()"
+        (click)="logOut()"
+      >
+        <span class=""></span> Log out <i class="bi bi-door-closed"></i>
       </button>
     </form>
   </nav>

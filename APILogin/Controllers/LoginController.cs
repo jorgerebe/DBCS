@@ -2,11 +2,9 @@ using APILogin.Models;
 using JWT.Algorithms;
 using JWT.Builder;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using System.Security.Cryptography;
 using System.Text.Json.Nodes;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using BC = BCrypt.Net.BCrypt;
 
 namespace APILogin.Controllers
@@ -72,6 +70,8 @@ namespace APILogin.Controllers
                                   .AddClaim("name", fullUser.GetValue("name"))
                                   .AddClaim("sub", fullUser.GetValue("email"))
                                   .AddClaim("role", fullUser.GetValue("role"))
+                                  .AddClaim("kid", "S12q4zYfzyWBwOAJymR7q4BANULcJEAZ")
+                                  .AddClaim("id", fullUser.GetValue("id"))
                                   .IssuedAt(DateTime.UtcNow)
                                   .ExpirationTime(DateTimeOffset.UtcNow.AddHours(1).ToUnixTimeSeconds())
                                   .Encode();

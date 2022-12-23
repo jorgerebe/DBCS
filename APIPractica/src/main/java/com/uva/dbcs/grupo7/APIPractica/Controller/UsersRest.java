@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin("*")
 public class UsersRest {
 
     private final UserRepository repository;
-
+ 
     UsersRest(UserRepository repository) {
         this.repository = repository;
     }

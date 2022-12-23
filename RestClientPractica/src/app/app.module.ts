@@ -17,6 +17,12 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastsContainer } from './shared/toasts-container.component';
 import { ToastService } from './shared/toast-service';
 import { LoginComponent } from './login/login.component';
+import { ReservaListarComponent } from './reserva-listar/reserva-listar.component';
+import { ReservaCrearComponent } from './reserva-crear/reserva-crear.component';
+import { DatePipe } from '@angular/common';
+import { ReservaEditarComponent } from './reserva-editar/reserva-editar.component';
+import { ReservaAvailabilityComponent } from './reserva-availability/reserva-availability.component';
+import { StatusPipePipe } from './shared/status-pipe.pipe';
 
 @NgModule({
   declarations: [
@@ -26,6 +32,11 @@ import { LoginComponent } from './login/login.component';
     CrearUserComponent,
     ToastsContainer,
     LoginComponent,
+    ReservaListarComponent,
+    ReservaCrearComponent,
+    ReservaEditarComponent,
+    ReservaAvailabilityComponent,
+    StatusPipePipe,
   ],
   imports: [
     BrowserModule,
@@ -37,6 +48,7 @@ import { LoginComponent } from './login/login.component';
   ],
   providers: [
     ClienteApiRestService,
+    DatePipe,
     ToastService,
     {
       provide: HTTP_INTERCEPTORS,

@@ -1,0 +1,114 @@
+<h3 class="titulo mt-2 mb-4">Gestión de reservas</h3>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="filters col-sm-8">
+        <form>
+          <div class="form-group row">
+            <button
+              type="button"
+              class="btn btn-primary btnfechas"
+              (click)="filterFechas('before')"
+              *ngIf="getRole() == 'HOST'"
+              [disabled]="filterFechasOption == 'before'"
+            >
+              15 Días previos
+            </button>
+
+            <button
+              type="button"
+              class="btn btn-primary btnfechas"
+              (click)="filterFechas('after')"
+              *ngIf="getRole() == 'HOST'"
+              [disabled]="filterFechasOption == 'after'"
+            >
+              15 Días después
+            </button>
+          </div>
+          <label class="control-label estdlo" for="status">Estado</label>
+          <select
+            class="form-select form-select-sm estd"
+            [(ngModel)]="filterOption"
+            name="status"
+            #role="ngModel"
+          >
+            <option value="" selected>--</option>
+            <option *ngFor="let st of status | keyvalue" [ngValue]="st.value">
+              {{ st.value }}
+            </option>
+          </select>
+
+          <div class="row">
+            <a class="limpiar" role="button" (click)="clearFilters()"
+              >Limpiar filtros</a
+            >
+          </div>
+        </form>
+      </div>
+      <div class="row">
+        <table class="table table-striped text-center">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nombre huésped</th>
+              <th>ID huésped</th>
+              <th>Precio</th>
+              <th>Habitaciones</th>
+              <th>Huéspedes</th>
+              <th>Estado</th>
+              <th>Fecha entrada</th>
+              <th>Fecha salida</th>
+              <th *ngIf="getRole() == 'HOST'">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="
+                let reserva of Reservas
+                  | statusPipe : filterOption : filterFechasOption;
+                index as i
+              "
+            >
+              <td>
+                <i>{{ reserva.id }}</i>
+              </td>
+              <td>
+                <i>{{ reserva.guestName }}</i>
+              </td>
+              <td>
+                <i>{{ reserva.guestID }}</i>
+              </td>
+              <td>
+                <i>{{ reserva.price }}</i>
+              </td>
+              <td>
+                <i>{{ reserva.units }}</i>
+              </td>
+
+              <td>
+                <i>{{ reserva.numGuest }}</i>
+              </td>
+              <td>
+                <i>{{ reserva.status }}</i>
+              </td>
+              <td>
+                <i>{{ reserva.dateIn }}</i>
+              </td>
+              <td>
+                <i>{{ reserva.dateOut }}</i>
+              </td>
+              <td *ngIf="getRole() == 'HOST'" class="actions">
+                <a
+                  class="btn btn-info"
+                  [routerLink]="['/reservas', reserva.id, 'editar']"
+                >
+                  <i class="fas fa-pencil"></i
+                ></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
