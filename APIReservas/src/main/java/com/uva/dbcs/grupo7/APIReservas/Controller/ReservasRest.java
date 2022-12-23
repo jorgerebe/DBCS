@@ -165,12 +165,7 @@ public class ReservasRest {
 
 
         existente.setGuestName(res.getGuestName());
-        existente.setDateIn(res.getDateIn());
-        existente.setDateOut(res.getDateOut());
         existente.setNumGuest(res.getNumGuest());
-        long ndays = ChronoUnit.DAYS.between(res.getDateIn(), res.getDateOut());
-        existente.setPrice(ndays*precio);
-        existente.setUnits(res.getUnits());
         existente.setStatus(res.getStatus());
 
 
